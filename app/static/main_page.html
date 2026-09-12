@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLMun Student Support Chatbot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="main-page-body">
+    <!-- Main app layout: sidebar + chat area -->
+    <div class="main-shell">
+        <button type="button" class="mobile-sidebar-trigger" id="mobileSidebarTrigger" aria-label="Open sidebar" title="Open sidebar">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <!-- Left sidebar with university contact details -->
+        <aside class="support-sidebar" id="supportSidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="brand-text">
+                        <h2>PLMun Chatbot</h2>
+                        <p id="sidebarSubtitle">Registrar & Academic Help</p>
+                    </div>
+                </div>
+                <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Collapse sidebar" title="Collapse sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <button type="button" class="new-chat-btn" id="newChatBtn" title="New Chat">
+                <i class="fa-solid fa-plus"></i>
+                <span id="newChatLabel">New Chat</span>
+            </button>
+
+            <div class="recents-section">
+                <p class="recents-label" id="recentsLabel">Recent</p>
+                <ul class="recents-list">
+                    <li id="recentsEmptyState" class="recent-empty-state">No recent chats yet</li>
+                    <li class="recent-item"><i class="fa-solid fa-message"></i><span id="recentItem1">Enrollment steps for 2nd year</span></li>
+                    <li class="recent-item"><i class="fa-solid fa-message"></i><span id="recentItem2">TOR request process</span></li>
+                    <li class="recent-item"><i class="fa-solid fa-message"></i><span id="recentItem3">Checking grades online</span></li>
+                </ul>
+            </div>
+
+            <div class="key-offices-section">
+                <p class="key-offices-label" id="keyOfficesLabel">Key Offices</p>
+
+                <div class="office-item">
+                    <h5 id="office1Name">Registrar's Office</h5>
+                    <p id="office1Location">Admin Bldg, Ground Floor</p>
+                </div>
+                <div class="office-item">
+                    <h5 id="office2Name">Office of Student Affairs</h5>
+                    <p id="office2Location">Main Bldg, Room 102</p>
+                </div>
+                <div class="office-item">
+                    <h5 id="office3Name">Guidance &amp; Counseling</h5>
+                    <p id="office3Location">Student Center</p>
+                </div>
+                <div class="office-item">
+                    <h5 id="office4Name">Finance / Cashier</h5>
+                    <p id="office4Location">Admin Bldg, Ground Floor</p>
+                </div>
+            </div>
+
+            <div class="sidebar-info">
+                <div>
+                    <h4 id="contactHeading">Contact Information and Location</h4>
+                </div>
+
+                <div class="info-row">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="info-text">
+                        <p>University Road NBP Reservation</p>
+                        <p>Brgy. Poblacion, City of Muntinlupa, Philippines, 1776</p>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-phone"></i>
+                    <p>02-8248-9161</p>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-envelope"></i>
+                    <p>plmuncomm@plmun.edu.ph</p>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-clock"></i>
+                    <div class="info-text">
+                        <p id="officeHoursWeekday">Mon–Fri: 7:00 AM – 6:00 PM</p>
+                        <p id="officeHoursSaturday">Sat: 8:00 AM – 12:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main chat area with header, messages, and input form -->
+        <main class="chat-panel">
+            <!-- Top bar with page title and action buttons -->
+            <header class="chat-header">
+                <div class="header-title-group">
+                    <h1 id="pageTitle">PLMun Chatbot</h1>
+                    <p id="pageSubtitle">Ask anything about registrar and academic services.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="voiceButton" title="Voice input"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="icon-btn" id="speakButton" title="Read answer aloud"><i class="fa-solid fa-volume-high"></i></button>
+                    <div class="profile-menu">
+                        <button class="profile-toggle" title="Profile menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                        <div class="profile-dropdown">
+                            <button type="button" class="menu-action" id="settingsTrigger">Settings</button>
+                            <a href="#" id="logoutLink">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable conversation area -->
+            <section class="chat-messages" id="chatMessages">
+                <div class="chat-empty-state" id="chatEmptyState" role="status" aria-live="polite">
+                    <div class="empty-icon">💬</div>
+                    <h3>Start a conversation</h3>
+                    <p>Ask about enrollment, grades, or documents.</p>
+                </div>
+                <div class="message bot">
+                    <span class="avatar">🤖</span>
+                    <div class="bubble" id="welcomeBubble">Hello! I’m your PLMun student support assistant. You can ask me about enrollment, grades, documents, or payments.</div>
+                </div>
+            </section>
+
+            <!-- Quick action buttons for common questions -->
+            <div class="quick-options" id="quickOptions">
+                <button class="quick-btn" data-topic="How do I enroll?">How do I enroll?</button>
+                <button class="quick-btn" data-topic="Where can I check my grades?">Where can I check my grades?</button>
+                <button class="quick-btn" data-topic="How do I request a document?">How do I request a document?</button>
+            </div>
+
+            <!-- User input form for sending messages -->
+            <form class="chat-form" id="chatForm">
+                <input type="text" id="chatInput" placeholder="Type your question here..." autocomplete="off">
+                <button type="submit">Send</button>
+            </form>
+        </main>
+    </div>
+
+    <!-- Settings popup modal -->
+    <div class="modal-backdrop" id="settingsModal" aria-hidden="true">
+        <div class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+            <div class="settings-header">
+                <h3 id="settingsTitle">Settings</h3>
+                <button type="button" class="settings-close" id="closeSettings" aria-label="Close settings">×</button>
+            </div>
+
+            <div class="settings-section">
+                <p class="settings-label" id="languageLabel">Language</p>
+                <div class="toggle-group">
+                    <button type="button" class="lang-btn active" data-language="en">English</button>
+                    <button type="button" class="lang-btn" data-language="tl">Tagalog</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <p class="settings-label" id="zoomLabel">Zoom</p>
+                <div class="zoom-controls">
+                    <button type="button" class="zoom-btn" id="zoomOutBtn" aria-label="Zoom out">−</button>
+                    <input type="range" id="zoomRange" min="80" max="140" step="10" value="100">
+                    <button type="button" class="zoom-btn" id="zoomInBtn" aria-label="Zoom in">+</button>
+                </div>
+                <p class="zoom-value" id="zoomValue">100%</p>
+                <p class="settings-help" id="zoomHelp">Use the buttons or drag the slider to adjust the screen size.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

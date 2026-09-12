@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLMun Student Support Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+    <!-- Sign-in page wrapper -->
+    <div class="container">
+        <!-- Left side: branding and welcome information -->
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/logo.png" alt="PLMun Logo" />
+                <span>Student Support</span>
+            </div>
+            <div class="welcome-content">
+                <h2>Welcome,</h2>
+                <h1>PLMunians!</h1>
+                <p>Your journey toward discipline, awareness, and growth starts here.</p>
+                <p>Stay informed, stay respectful, and stay empowered.</p>
+            </div>
+            <div class="portal-info">
+                <img src="images/user-icon.png" alt="User Icon" />
+                <div>
+                    <h4>Student Portal</h4>
+                    <p>Access your account</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side: login form -->
+        <div class="right-panel">
+            <div class="login-box">
+                <h1>Hi PLMunian</h1>
+                <p>Welcome back! Please login to your account.</p>
+
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required />
+                    </div>
+                    <div class="options">
+                        <div class="remember">
+                            <input type="checkbox" id="remember" />
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+                    <button type="submit">Login</button>
+                    <p class="form-message" id="loginMessage" aria-live="polite"></p>
+                    <p class="create-account">
+                        Don't have an account? <a href="create_account.html">Create account</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <!-- Left side: branding and intro content -->
+        <div class="left-panel">
+            <div class="logo">
+                <img src="images/logo.png" alt="PLMun Logo" />
+                <span>Student Support</span>
+            </div>
+            <div class="welcome-content">
+                <h2>Welcome,</h2>
+                <h1>PLMunians!</h1>
+                <p>Create your account and access student support services with ease.</p>
+                <p>Stay connected, stay informed, and stay supported.</p>
+            </div>
+            <div class="portal-info">
+                <img src="images/user-icon.png" alt="User Icon" />
+                <div>
+                    <h4>Student Portal</h4>
+                    <p>Register your account</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side: account creation form -->
+        <div class="right-panel">
+            <div class="login-box">
+                <h1>Create Account</h1>
+                <p>Fill in your details to get started.</p>
+
+                <form id="signupForm">
+                    <div class="input-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" name="full_name" placeholder="Enter your full name" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Create a password" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" required />
+                    </div>
+                    <button type="submit">Create Account</button>
+                    <p class="form-message" id="signupMessage" aria-live="polite"></p>
+                </form>
+
+                <p class="create-account">
+                    Already have an account? <a href="sign_in.html">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
