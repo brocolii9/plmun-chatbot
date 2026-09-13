@@ -149,6 +149,36 @@ button:hover { background: #08734d; }
 .sidebar-toggle:hover { background: rgba(255,255,255,0.22); }
 .support-sidebar.is-collapsed .sidebar-toggle i { transform: rotate(180deg); }
 
+/* Voice button — listening state */
+button.icon-btn.is-listening {
+    background: #0a8f60 !important;
+    border-color: #0a8f60 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 4px rgba(10, 143, 96, 0.25) !important;
+    animation: micPulse 1.2s ease-in-out infinite !important;
+}
+
+/* Icon inside the button — MUST be white */
+button.icon-btn.is-listening i,
+button.icon-btn.is-listening .fa-solid,
+button.icon-btn.is-listening .fa-microphone,
+button.icon-btn.is-listening svg {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    background: transparent !important;
+}
+
+@keyframes micPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 4px rgba(10, 143, 96, 0.25);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 14px rgba(10, 143, 96, 0);
+        transform: scale(1.05);
+    }
+}
+
 .mobile-sidebar-trigger { display: none; }
 
 .new-chat-btn {

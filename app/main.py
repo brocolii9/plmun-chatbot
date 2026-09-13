@@ -471,6 +471,95 @@ def retrain(db: Session = Depends(get_db)):
         "trained": nlp.classifier.is_trained,
     }
 
+@app.get("/api/admin/analytics")
+def analytics(db: Session = Depends(get_db)):
+    """
+    Returns usage analytics computed from the messages table.
+    No auth required for now — add admin auth in a later sprint.
+    """
+    from sqlalchemy import func, desc
+    from datetime import datetime, timedelta, date
+
+    # --- Top intents (from student messages only) ---
+    top_intents_rows = (
+        db.query(
+            Message.intent_matched,
+            func.count(Message.id).label("count"),
+            func.avg(Message.confidence_score).label("avg_confidence"),
+        )
+        .filter(Message.sender == "student")
+        .filter(Message.intent_matched.isnot(None))
+        .group_by(Message.intent_matched)
+        .order_by(desc("count"))
+        .all()
+    )
+
+    top_intents = [
+        {
+            "intent": row.intent_matched,
+            "count": row.count,
+            "avg_confidence": round(row.avg_confidence or 0, 4),
+        }
+        for row in top_intents_rows
+    ]
+
+    # --- Out-of-scope rate ---
+    total_student_msgs = (
+        db.query(func.count(Message.id))
+        .filter(Message.sender == "student")
+        .scalar() or 0
+    )
+    out_of_scope = (
+        db.query(func.count(Message.id))
+        .filter(Message.sender == "student")
+        .filter(Message.intent_matched.is_(None))
+        .scalar() or 0
+    )
+
+    # --- Total conversations ---
+    total_conversations = db.query(func.count(Conversation.id)).scalar() or 0
+
+    # --- Total users ---
+    total_users = db.query(func.count(User.id)).scalar() or 0
+
+    # --- Daily volume for last 7 days ---
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    daily_rows = (
+        db.query(
+            func.date(Message.timestamp).label("day"),
+            func.count(Message.id).label("count"),
+        )
+        .filter(Message.sender == "student")
+        .filter(Message.timestamp >= seven_days_ago)
+        .group_by(func.date(Message.timestamp))
+        .order_by("day")
+        .all()
+    )
+
+    daily_volume = [
+        {"date": str(row.day), "count": row.count} for row in daily_rows
+    ]
+
+    # --- Average confidence across all matched intents ---
+    avg_conf = (
+        db.query(func.avg(Message.confidence_score))
+        .filter(Message.sender == "student")
+        .filter(Message.confidence_score.isnot(None))
+        .scalar()
+    )
+
+    return {
+        "summary": {
+            "total_conversations": total_conversations,
+            "total_users": total_users,
+            "total_student_messages": total_student_msgs,
+            "out_of_scope_messages": out_of_scope,
+            "out_of_scope_rate": round(out_of_scope / total_student_msgs, 4) if total_student_msgs else 0,
+            "average_confidence": round(avg_conf or 0, 4),
+        },
+        "top_intents": top_intents,
+        "daily_volume": daily_volume,
+    }
 
 STATIC_DIR = os.path.join(
     os.path.dirname(__file__),
@@ -486,6 +575,9 @@ def root():
 def sign_in_page():
     return FileResponse(os.path.join(STATIC_DIR, "sign_in.html"))
 
+@app.get("/admin/analytics")
+def analytics_page():
+    return FileResponse(os.path.join(STATIC_DIR, "admin_analytics.html"))
 
 app.mount(
     "/",

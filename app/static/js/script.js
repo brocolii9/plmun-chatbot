@@ -139,6 +139,26 @@ function initChatPage() {
     return;
   }
 
+    // ---------- Developer mode ----------
+  // Toggle with ?debug=1 in URL, or press Ctrl+Shift+D on the page
+  let devMode = new URLSearchParams(window.location.search).get("debug") === "1";
+
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "d") {
+      e.preventDefault();
+      devMode = !devMode;
+      document.querySelectorAll(".dev-meta").forEach((el) => {
+        el.style.display = devMode ? "block" : "none";
+      });
+      const toast = document.createElement("div");
+      toast.textContent = devMode ? "Developer mode: ON" : "Developer mode: OFF";
+      toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#0a8f60;color:white;padding:10px 16px;border-radius:10px;font-size:13px;z-index:9999;font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,0.2)";
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 1800);
+    }
+  });
+
+
   const chatInput = document.getElementById("chatInput");
   const chatMessages = document.getElementById("chatMessages");
   const quickOptions = document.getElementById("quickOptions");
@@ -158,7 +178,7 @@ function initChatPage() {
   let conversationId = null;
   let firstUserMessageSent = false;
 
-  function addBubble(sender, text, meta) {
+   function addBubble(sender, text, meta, intent, lang) {
     const wrap = document.createElement("div");
     wrap.className = "message " + (sender === "student" ? "user" : "bot");
 
@@ -170,13 +190,20 @@ function initChatPage() {
     bubble.className = "bubble";
     bubble.textContent = text;
 
+    // Store intent + lang for TTS
+    if (sender === "bot") {
+      if (intent) bubble.dataset.intent = intent;
+      if (lang)   bubble.dataset.lang = lang;
+    }
+
     wrap.appendChild(avatar);
     wrap.appendChild(bubble);
     chatMessages.appendChild(wrap);
 
     if (meta) {
       const m = document.createElement("div");
-      m.style.cssText = "font-size:11px;color:#6b7d75;margin-top:4px;margin-left:48px";
+      m.className = "dev-meta";
+      m.style.cssText = "font-size:11px;color:#6b7d75;margin-top:4px;margin-left:48px;display:" + (devMode ? "block" : "none");
       m.textContent = meta;
       chatMessages.appendChild(m);
     }
@@ -302,7 +329,9 @@ function initChatPage() {
       } else if (data.out_of_scope) {
         meta = "out of scope - referred to Registrar";
       }
-      addBubble("bot", data.reply, meta);
+      const detectedLang = /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|hakbang|bayad|sagot|tanong|mag|ngayon)\b/i.test(text) ? "fil" : "en";
+      const audioIntent = data.intent_matched || (data.out_of_scope ? "referral" : null);
+      addBubble("bot", data.reply, meta, audioIntent, detectedLang);
       loadRecent();
     } catch (_) {
       addBubble("bot", "Network error. Please try again.");
@@ -372,8 +401,189 @@ function initChatPage() {
 
   const voiceBtn = document.getElementById("voiceButton");
   const speakBtn = document.getElementById("speakButton");
-  if (voiceBtn) voiceBtn.addEventListener("click", () => alert("Voice input is Phase 2 (P1) - not part of this build."));
-  if (speakBtn) speakBtn.addEventListener("click", () => alert("Text-to-speech is Phase 2 (P1) - not part of this build."));
+    if (voiceBtn) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      voiceBtn.addEventListener("click", () => {
+        alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
+      });
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      let listening = false;
+
+      // Detect language: if user typed Tagalog before, use fil-PH; else en-PH
+      function pickLang() {
+        const lastUser = chatMessages.querySelector(".message.user .bubble");
+        if (lastUser) {
+          const filMarkers = /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|mag|ngayon)\b/i;
+          if (filMarkers.test(lastUser.textContent)) return "fil-PH";
+        }
+        return "en-PH";
+      }
+
+      voiceBtn.addEventListener("click", () => {
+        if (listening) {
+          recognition.stop();
+          return;
+        }
+        recognition.lang = pickLang();
+        try {
+          recognition.start();
+        } catch (e) {
+          // Already started — ignore
+        }
+      });
+
+      recognition.onstart = () => {
+        listening = true;
+        voiceBtn.classList.add("is-listening");
+        chatInput.placeholder = "Listening... speak now";
+      };
+
+      recognition.onresult = (event) => {
+        let interim = "";
+        let final = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) final += transcript;
+          else interim += transcript;
+        }
+        chatInput.value = final || interim;
+      };
+
+      recognition.onend = () => {
+        listening = false;
+        voiceBtn.classList.remove("is-listening");
+        chatInput.placeholder = "Type your question here...";
+
+        // Auto-send if we captured text
+        const text = chatInput.value.trim();
+        if (text) {
+          sendMessage();
+        }
+      };
+
+      recognition.onerror = (event) => {
+        listening = false;
+        voiceBtn.classList.remove("is-listening");
+        chatInput.placeholder = "Type your question here...";
+        if (event.error === "not-allowed") {
+          alert("Microphone access was denied. Please allow mic access in your browser settings.");
+        }
+      };
+    }
+  }
+
+  // ---------- TTS (Read Aloud) ----------
+    // ---------- TTS (Read Aloud) with toggle ----------
+  // ---------- TTS (Read Aloud) with improved voice selection ----------
+  // ---------- TTS with pre-recorded audio + Web Speech fallback ----------
+  if (speakBtn) {
+    let currentAudio = null;
+
+    // Preload Web Speech voices (fallback)
+    let cachedVoices = [];
+    function loadVoices() { cachedVoices = window.speechSynthesis.getVoices(); }
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function stopAll() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+      }
+      window.speechSynthesis.cancel();
+      speakBtn.classList.remove("is-listening");
+      speakBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    }
+
+    function useWebSpeech(text, lang) {
+      const utter = new SpeechSynthesisUtterance(text);
+      const isFil = lang === "fil";
+
+      let voices = window.speechSynthesis.getVoices();
+      if (!voices.length) voices = cachedVoices;
+
+      let voice = null;
+      if (isFil) {
+        voice = voices.find(v => v.lang === "fil-PH" || v.lang === "tl-PH")
+             || voices.find(v => v.lang === "en-PH")
+             || voices.find(v => v.lang.startsWith("en"));
+      } else {
+        voice = voices.find(v => v.lang === "en-PH")
+             || voices.find(v => v.lang === "en-US")
+             || voices.find(v => v.lang.startsWith("en"));
+      }
+      if (voice) utter.voice = voice;
+
+      utter.lang = isFil ? "fil-PH" : "en-US";
+      utter.rate = 0.9;
+      utter.pitch = 1.0;
+      utter.volume = 1.0;
+
+      utter.onstart = () => {
+        speakBtn.classList.add("is-listening");
+        speakBtn.innerHTML = '<i class="fa-solid fa-stop"></i>';
+      };
+      utter.onend = () => stopAll();
+      utter.onerror = () => stopAll();
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    speakBtn.addEventListener("click", async () => {
+      // Toggle: if already playing, stop
+      if (currentAudio || window.speechSynthesis.speaking) {
+        stopAll();
+        return;
+      }
+
+      const botBubbles = chatMessages.querySelectorAll(".message.bot .bubble");
+      if (!botBubbles.length) return;
+      const lastBubble = botBubbles[botBubbles.length - 1];
+      const text = lastBubble.textContent;
+      const intent = lastBubble.dataset.intent;
+      const lang = lastBubble.dataset.lang || "en";
+
+      // 1. Try pre-recorded audio first
+      if (intent) {
+        const audioPath = `/audio/${intent}_${lang}.mp3`;
+        try {
+          const audio = new Audio(audioPath);
+          currentAudio = audio;
+
+          audio.onplay = () => {
+            speakBtn.classList.add("is-listening");
+            speakBtn.innerHTML = '<i class="fa-solid fa-stop"></i>';
+          };
+          audio.onended = () => stopAll();
+          audio.onerror = () => {
+            console.log("[TTS] MP3 missing, using Web Speech:", audioPath);
+            currentAudio = null;
+            useWebSpeech(text, lang);
+          };
+
+          await audio.play();
+          return;
+        } catch (err) {
+          console.log("[TTS] Audio blocked, using Web Speech:", err);
+          currentAudio = null;
+        }
+      }
+
+      // 2. Fallback to Web Speech API
+      useWebSpeech(text, lang);
+    });
+  }
+
 
   loadSuggestions();
   loadRecent();
