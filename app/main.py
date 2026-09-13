@@ -1,13 +1,16 @@
 import os
 import uuid
+from datetime import datetime
 from contextlib import asynccontextmanager
 from typing import cast
 
+from .seed import seed_if_empty, seed_admin_if_empty
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from . import nlp
 from .auth import create_token, get_principal, hash_password, verify_password
@@ -37,6 +40,7 @@ async def lifespan(app: FastAPI):
     db = SessionLocal()
     try:
         seeded = seed_if_empty(db)
+        seed_admin_if_empty(db)
         n = nlp.retrain_from_db(db)
         print(
             "[startup] seeded=%s nlp_samples=%d threshold=%.2f"
@@ -561,11 +565,197 @@ def analytics(db: Session = Depends(get_db)):
         "daily_volume": daily_volume,
     }
 
+
+
+
 STATIC_DIR = os.path.join(
     os.path.dirname(__file__),
     "static",
 )
 
+# =============================================================================
+# ADMIN ROUTES
+# =============================================================================
+
+@app.post("/api/admin/login")
+def admin_login(payload: LoginRequest, db: Session = Depends(get_db)):
+    from .models import AdminUser
+
+    email = payload.email.lower().strip()
+    admin = db.query(AdminUser).filter(AdminUser.email == email).first()
+
+    if not admin or not verify_password(payload.password, admin.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid admin credentials.")
+
+    token = create_token(
+        str(admin.id),
+        kind="admin",
+        role=admin.role,
+        full_name=admin.full_name,
+    )
+    return TokenResponse(
+        access_token=token,
+        kind="admin",
+        role=admin.role,
+        full_name=admin.full_name,
+    )
+
+
+def _require_admin_principal(principal: dict = Depends(get_principal)) -> dict:
+    if principal.get("kind") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required.")
+    return principal
+
+
+@app.get("/api/admin/me")
+def admin_me(principal: dict = Depends(_require_admin_principal)):
+    return {
+        "id": principal.get("sub"),
+        "role": principal.get("role"),
+        "full_name": principal.get("full_name"),
+        "kind": principal.get("kind"),
+    }
+
+
+# ---------- KB CRUD ----------
+
+@app.get("/api/admin/kb")
+def admin_list_kb(
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
+    entries = db.query(KnowledgeBase).order_by(KnowledgeBase.id.desc()).all()
+    return [
+        {
+            "id": e.id,
+            "category": e.category,
+            "question": e.question,
+            "answer_en": e.answer_en,
+            "answer_fil": e.answer_fil,
+            "last_updated_at": e.last_updated_at.isoformat() if e.last_updated_at else None,
+        }
+        for e in entries
+    ]
+
+
+class KBPayload(BaseModel):
+    category: str
+    question: str
+    answer_en: str
+    answer_fil: str
+
+
+@app.post("/api/admin/kb", status_code=201)
+def admin_create_kb(
+    payload: KBPayload,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
+    entry = KnowledgeBase(
+        category=payload.category,
+        question=payload.question,
+        answer_en=payload.answer_en,
+        answer_fil=payload.answer_fil,
+        last_updated_at=datetime.utcnow(),
+    )
+    db.add(entry)
+    db.commit()
+    db.refresh(entry)
+    return {"id": entry.id, "message": "KB entry created."}
+
+
+@app.put("/api/admin/kb/{entry_id}")
+def admin_update_kb(
+    entry_id: int,
+    payload: KBPayload,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
+    entry = db.query(KnowledgeBase).filter(KnowledgeBase.id == entry_id).first()
+    if not entry:
+        raise HTTPException(status_code=404, detail="KB entry not found.")
+
+    entry.category = payload.category
+    entry.question = payload.question
+    entry.answer_en = payload.answer_en
+    entry.answer_fil = payload.answer_fil
+    entry.last_updated_at = datetime.utcnow()
+
+    db.commit()
+    return {"message": "KB entry updated."}
+
+
+@app.delete("/api/admin/kb/{entry_id}")
+def admin_delete_kb(
+    entry_id: int,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
+    entry = db.query(KnowledgeBase).filter(KnowledgeBase.id == entry_id).first()
+    if not entry:
+        raise HTTPException(status_code=404, detail="KB entry not found.")
+
+    db.delete(entry)
+    db.commit()
+    return {"message": "KB entry deleted."}
+
+
+# ---------- Conversation logs ----------
+
+@app.get("/api/admin/logs")
+def admin_logs(
+    limit: int = 50,
+    offset: int = 0,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
+    total = db.query(Message).count()
+    rows = (
+        db.query(Message)
+        .order_by(Message.id.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+    return {
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "messages": [
+            {
+                "id": m.id,
+                "conversation_id": m.conversation_id,
+                "sender": m.sender,
+                "text": m.text[:300],
+                "intent_matched": m.intent_matched,
+                "confidence_score": m.confidence_score,
+                "timestamp": m.timestamp.isoformat(),
+            }
+            for m in rows
+        ],
+    }
+
+
+# ---------- Admin page routes ----------
+
+@app.get("/admin/login")
+def admin_login_page():
+    return FileResponse(os.path.join(STATIC_DIR, "admin", "login.html"))
+
+
+@app.get("/admin/dashboard")
+def admin_dashboard_page():
+    return FileResponse(os.path.join(STATIC_DIR, "admin", "dashboard.html"))
+
+
+@app.get("/admin/kb")
+def admin_kb_page():
+    return FileResponse(os.path.join(STATIC_DIR, "admin", "kb.html"))
+
+
+@app.get("/admin/logs")
+def admin_logs_page():
+    return FileResponse(os.path.join(STATIC_DIR, "admin", "logs.html"))
 
 @app.get("/")
 def root():

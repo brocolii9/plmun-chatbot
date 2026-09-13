@@ -27,3 +27,7 @@ REGISTRAR_REFERRAL_FIL = (
     " registrar@plmun.edu.ph\n"
     " Lunes-Biyernes, 8:00 AM - 5:00 PM"
 )
+
+# --- Admin seed credentials (change in production) ---
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@plmun.edu.ph")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")

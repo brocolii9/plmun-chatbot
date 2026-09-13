@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLMun Admin — Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#" role="button" aria-label="Toggle sidebar" title="Toggle sidebar"><i class="fas fa-bars" aria-hidden="true"></i></a></li>
+      <li class="nav-item d-none d-sm-inline-block"><a href="/admin/dashboard" class="nav-link">Home</a></li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-user"></i>
+          <span id="adminName" class="ml-1">Admin</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a href="#" class="dropdown-item" id="logoutBtn"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="/admin/dashboard" class="brand-link">
+      <span class="brand-text font-weight-bold ml-2">PLMun Admin</span>
+    </a>
+    <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="info"><a href="#" class="d-block" id="sidebarName">Admin</a></div>
+      </div>
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+            <li class="nav-item" role="none"><a href="/admin/dashboard" class="nav-link active" role="menuitem">...</a></li>
+            <li class="nav-item" role="none"><a href="/admin/kb" class="nav-link" role="menuitem">...</a></li>
+            <li class="nav-item" role="none"><a href="/admin/logs" class="nav-link" role="menuitem">...</a></li>
+            <li class="nav-item" role="none"><a href="/" class="nav-link" role="menuitem">...</a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="content-wrapper">
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2"><div class="col-sm-6"><h1 class="m-0">Dashboard</h1></div></div>
+      </div>
+    </div>
+
+    <section class="content">
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+              <div class="inner"><h3 id="statConversations">—</h3><p>Conversations</p></div>
+              <div class="icon"><i class="fas fa-comments"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+              <div class="inner"><h3 id="statUsers">—</h3><p>Registered Users</p></div>
+              <div class="icon"><i class="fas fa-users"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+              <div class="inner"><h3 id="statMessages">—</h3><p>Student Messages</p></div>
+              <div class="icon"><i class="fas fa-envelope"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+              <div class="inner"><h3 id="statOutOfScope">—</h3><p>Out-of-Scope Rate</p></div>
+              <div class="icon"><i class="fas fa-question-circle"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header"><h3 class="card-title">Top Intents</h3></div>
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead><tr><th>Intent</th><th>Count</th><th>Avg Confidence</th></tr></thead>
+                  <tbody id="intentsTable"><tr><td colspan="3" class="text-center text-muted p-3">Loading…</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="card">
+              <div class="card-header"><h3 class="card-title">Daily Volume (7 days)</h3></div>
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead><tr><th>Date</th><th>Messages</th></tr></thead>
+                  <tbody id="dailyTable"><tr><td colspan="2" class="text-center text-muted p-3">Loading…</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="main-footer"><strong>PLMun Chatbot Admin</strong> — Capstone Project 2026</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
+<script src="/admin/admin-shell.js"></script>
+<script>
+(async function () {
+  await initAdminShell();
+  await loadAnalytics();
+})();
+
+async function loadAnalytics() {
+  const res = await adminFetch("/api/admin/analytics");
+  if (!res) return;
+  const data = await res.json();
+
+  document.getElementById("statConversations").textContent = data.summary.total_conversations;
+  document.getElementById("statUsers").textContent = data.summary.total_users;
+  document.getElementById("statMessages").textContent = data.summary.total_student_messages;
+  document.getElementById("statOutOfScope").textContent =
+    (data.summary.out_of_scope_rate * 100).toFixed(1) + "%";
+
+  const intentsBody = document.getElementById("intentsTable");
+  if (!data.top_intents.length) {
+    intentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted p-3">No data yet</td></tr>';
+  } else {
+    intentsBody.innerHTML = data.top_intents.map(i => `
+      <tr>
+        <td><code>${i.intent}</code></td>
+        <td>${i.count}</td>
+        <td>${(i.avg_confidence * 100).toFixed(1)}%</td>
+      </tr>`).join("");
+  }
+
+  const dailyBody = document.getElementById("dailyTable");
+  if (!data.daily_volume.length) {
+    dailyBody.innerHTML = '<tr><td colspan="2" class="text-center text-muted p-3">No data yet</td></tr>';
+  } else {
+    dailyBody.innerHTML = data.daily_volume.map(d =>
+      `<tr><td>${d.date}</td><td>${d.count}</td></tr>`).join("");
+  }
+}
+</script>
+</body>
+</html>

@@ -139,6 +139,9 @@ function initChatPage() {
     return;
   }
 
+    // Voice preference: 'default' | 'female' | 'male'
+  let voicePreference = localStorage.getItem("plmun_voice_pref") || "default";
+
     // ---------- Developer mode ----------
   // Toggle with ?debug=1 in URL, or press Ctrl+Shift+D on the page
   let devMode = new URLSearchParams(window.location.search).get("debug") === "1";
@@ -399,6 +402,32 @@ function initChatPage() {
     });
   });
 
+    // ---------- Voice preference buttons (in Settings modal) ----------
+  function applyVoiceButtonState() {
+    document.querySelectorAll(".voice-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.voice === voicePreference);
+    });
+    const help = document.getElementById("voiceHelp");
+    if (help) {
+      help.textContent =
+        voicePreference === "default"
+          ? "Default uses the pre-recorded voice."
+          : voicePreference === "female"
+          ? "Female voice (may not be available on all systems)."
+          : "Male voice (may not be available on all systems).";
+    }
+  }
+  applyVoiceButtonState();
+
+  document.querySelectorAll(".voice-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      voicePreference = btn.dataset.voice;
+      localStorage.setItem("plmun_voice_pref", voicePreference);
+      applyVoiceButtonState();
+      console.log("[Voice] preference set to:", voicePreference);
+    });
+  });
+
   const voiceBtn = document.getElementById("voiceButton");
   const speakBtn = document.getElementById("speakButton");
     if (voiceBtn) {
@@ -483,15 +512,57 @@ function initChatPage() {
     // ---------- TTS (Read Aloud) with toggle ----------
   // ---------- TTS (Read Aloud) with improved voice selection ----------
   // ---------- TTS with pre-recorded audio + Web Speech fallback ----------
+    // ---------- TTS with gender preference ----------
   if (speakBtn) {
     let currentAudio = null;
 
-    // Preload Web Speech voices (fallback)
     let cachedVoices = [];
     function loadVoices() { cachedVoices = window.speechSynthesis.getVoices(); }
     loadVoices();
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    const FEMALE_NAMES = ["zira", "hazel", "susan", "samantha", "victoria", "karen",
+                          "moira", "tessa", "fiona", "maria", "catherine", "linda",
+                          "michelle", "clara", "emma", "ava", "allison", "serena",
+                          "joanna", "salli", "kendra", "kimberly", "nicole",
+                          "blessica", "rosa", "female", "woman", "girl"];
+    const MALE_NAMES   = ["david", "mark", "george", "james", "daniel", "alex",
+                          "fred", "tom", "rishi", "ramil", "male", "man", "guy",
+                          "paul", "ryan", "christopher", "eric",
+                          "matthew", "brian", "aaron", "joseph", "william",
+                          "justin", "kevin", "richard"];
+
+    function guessGender(voice) {
+      const n = (voice.name || "").toLowerCase();
+      if (FEMALE_NAMES.some(k => n.includes(k))) return "female";
+      if (MALE_NAMES.some(k => n.includes(k))) return "male";
+      return "unknown";
+    }
+
+    function findVoice(lang, genderPref) {
+      let voices = window.speechSynthesis.getVoices();
+      if (!voices.length) voices = cachedVoices;
+      if (!voices.length) return null;
+
+      const langMatches = voices.filter(v => {
+        if (lang === "fil") {
+          return v.lang === "fil-PH" || v.lang === "tl-PH"
+              || v.lang === "en-PH" || v.lang.startsWith("en");
+        }
+        return v.lang === "en-PH" || v.lang === "en-US" || v.lang.startsWith("en");
+      });
+
+      const pool = langMatches.length ? langMatches : voices;
+
+      if (genderPref === "female" || genderPref === "male") {
+        const matched = pool.find(v => guessGender(v) === genderPref);
+        if (matched) return matched;
+      }
+
+      if (lang === "fil") return pool.find(v => v.lang === "en-PH") || pool[0];
+      return pool.find(v => v.lang === "en-US") || pool[0];
     }
 
     function stopAll() {
@@ -505,42 +576,28 @@ function initChatPage() {
       speakBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
     }
 
-    function useWebSpeech(text, lang) {
+    function speakWithWebSpeech(text, lang, genderPref) {
       const utter = new SpeechSynthesisUtterance(text);
-      const isFil = lang === "fil";
-
-      let voices = window.speechSynthesis.getVoices();
-      if (!voices.length) voices = cachedVoices;
-
-      let voice = null;
-      if (isFil) {
-        voice = voices.find(v => v.lang === "fil-PH" || v.lang === "tl-PH")
-             || voices.find(v => v.lang === "en-PH")
-             || voices.find(v => v.lang.startsWith("en"));
-      } else {
-        voice = voices.find(v => v.lang === "en-PH")
-             || voices.find(v => v.lang === "en-US")
-             || voices.find(v => v.lang.startsWith("en"));
-      }
+      const voice = findVoice(lang, genderPref);
+      console.log("[TTS] speakWithWebSpeech → genderPref:", genderPref, "| voice:", voice ? voice.name : "NONE");
       if (voice) utter.voice = voice;
 
-      utter.lang = isFil ? "fil-PH" : "en-US";
+      utter.lang = lang === "fil" ? "fil-PH" : "en-US";
       utter.rate = 0.9;
-      utter.pitch = 1.0;
+      utter.pitch = genderPref === "female" ? 1.1 : 0.9;
       utter.volume = 1.0;
 
       utter.onstart = () => {
         speakBtn.classList.add("is-listening");
         speakBtn.innerHTML = '<i class="fa-solid fa-stop"></i>';
       };
-      utter.onend = () => stopAll();
+      utter.onended = () => stopAll();
       utter.onerror = () => stopAll();
 
       window.speechSynthesis.speak(utter);
     }
 
     speakBtn.addEventListener("click", async () => {
-      // Toggle: if already playing, stop
       if (currentAudio || window.speechSynthesis.speaking) {
         stopAll();
         return;
@@ -553,7 +610,15 @@ function initChatPage() {
       const intent = lastBubble.dataset.intent;
       const lang = lastBubble.dataset.lang || "en";
 
-      // 1. Try pre-recorded audio first
+      console.log("[TTS] Clicked. voicePreference =", voicePreference, "| lang =", lang, "| intent =", intent);
+
+      if (voicePreference !== "default") {
+        console.log("[TTS] Using gender:", voicePreference);
+        speakWithWebSpeech(text, lang, voicePreference);
+        return;
+      }
+
+      console.log("[TTS] Using default MP3");
       if (intent) {
         const audioPath = `/audio/${intent}_${lang}.mp3`;
         try {
@@ -566,21 +631,19 @@ function initChatPage() {
           };
           audio.onended = () => stopAll();
           audio.onerror = () => {
-            console.log("[TTS] MP3 missing, using Web Speech:", audioPath);
+            console.log("[TTS] MP3 not found, fallback to Web Speech");
             currentAudio = null;
-            useWebSpeech(text, lang);
+            speakWithWebSpeech(text, lang, "default");
           };
 
           await audio.play();
           return;
         } catch (err) {
-          console.log("[TTS] Audio blocked, using Web Speech:", err);
           currentAudio = null;
         }
       }
 
-      // 2. Fallback to Web Speech API
-      useWebSpeech(text, lang);
+      speakWithWebSpeech(text, lang, "default");
     });
   }
 

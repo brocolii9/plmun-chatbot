@@ -94,6 +94,26 @@ SEED = [
     ),
 ]
 
+def seed_admin_if_empty(db: Session) -> bool:
+    """Create a default super_admin if no admin exists."""
+    from .models import AdminUser
+    from .auth import hash_password
+    from .config import ADMIN_EMAIL, ADMIN_PASSWORD
+
+    if db.query(AdminUser).count() > 0:
+        return False
+
+    admin = AdminUser(
+        full_name="PLMun Super Admin",
+        email=ADMIN_EMAIL.lower(),
+        password_hash=hash_password(ADMIN_PASSWORD),
+        role="super_admin",
+    )
+    db.add(admin)
+    db.commit()
+    print(f"[seed] Created default admin: {ADMIN_EMAIL}")
+    return True
+
 
 def seed_if_empty(db: Session) -> bool:
     existing = db.query(KnowledgeBase).count()
