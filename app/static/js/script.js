@@ -262,15 +262,115 @@ function initChatPage() {
     list.slice(0, 8).forEach((c) => {
       const li = document.createElement("li");
       li.className = "recent-item";
+
       const icon = document.createElement("i");
       icon.className = "fa-solid fa-message";
+
       const span = document.createElement("span");
       span.textContent = c.title || ("Chat #" + c.id);
+      span.className = "recent-item-title";
+
+      const menuWrap = document.createElement("div");
+      menuWrap.className = "recent-item-menu";
+
+      const menuBtn = document.createElement("button");
+      menuBtn.type = "button";
+      menuBtn.className = "recent-item-menu-btn";
+      menuBtn.title = "More options";
+      menuBtn.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "recent-item-dropdown";
+
+      const renameOpt = document.createElement("button");
+      renameOpt.type = "button";
+      renameOpt.className = "recent-item-dropdown-option";
+      renameOpt.innerHTML = '<i class="fa-solid fa-pen"></i><span>Rename</span>';
+      renameOpt.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeAllRecentMenus();
+        renameConversation(c.id, span.textContent);
+      });
+
+      const deleteOpt = document.createElement("button");
+      deleteOpt.type = "button";
+      deleteOpt.className = "recent-item-dropdown-option recent-item-dropdown-option-danger";
+      deleteOpt.innerHTML = '<i class="fa-solid fa-trash"></i><span>Delete</span>';
+      deleteOpt.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeAllRecentMenus();
+        deleteConversation(c.id);
+      });
+
+      dropdown.appendChild(renameOpt);
+      dropdown.appendChild(deleteOpt);
+
+      menuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains("is-open");
+        closeAllRecentMenus();
+        if (!isOpen) {
+          dropdown.classList.add("is-open");
+          menuBtn.classList.add("is-active");
+        }
+      });
+
+      menuWrap.appendChild(menuBtn);
+      menuWrap.appendChild(dropdown);
+
       li.appendChild(icon);
       li.appendChild(span);
+      li.appendChild(menuWrap);
       li.addEventListener("click", () => openConversation(c.id));
       recentsList.appendChild(li);
     });
+  }
+
+  function closeAllRecentMenus() {
+    document.querySelectorAll(".recent-item-dropdown.is-open").forEach((el) => {
+      el.classList.remove("is-open");
+    });
+    document.querySelectorAll(".recent-item-menu-btn.is-active").forEach((el) => {
+      el.classList.remove("is-active");
+    });
+  }
+
+  document.addEventListener("click", closeAllRecentMenus);
+
+  async function renameConversation(id, currentTitle) {
+    const nextTitle = window.prompt("Rename chat:", currentTitle || "");
+    if (nextTitle === null) return;
+    const trimmed = nextTitle.trim();
+    if (!trimmed) return;
+
+    const res = await apiFetch("/api/chat/conversations/" + id, {
+      method: "PUT",
+      auth: true,
+      body: JSON.stringify({ title: trimmed }),
+    });
+    if (!res || !res.ok) return;
+    loadRecent();
+  }
+
+  async function deleteConversation(id) {
+    const confirmed = window.confirm("Delete this chat? This cannot be undone.");
+    if (!confirmed) return;
+
+    const res = await apiFetch("/api/chat/conversations/" + id, {
+      method: "DELETE",
+      auth: true,
+    });
+    if (!res || !res.ok) return;
+
+    if (conversationId === id) {
+      conversationId = null;
+      firstUserMessageSent = false;
+      clearMessages();
+      addBubble("bot", "Hello! I'm your PLMun student support assistant.");
+      loadSuggestions();
+    }
+
+    loadRecent();
   }
 
   async function openConversation(id) {
@@ -359,6 +459,14 @@ function initChatPage() {
   if (mobileTrigger && sidebar) {
     mobileTrigger.addEventListener("click", () => {
       sidebar.classList.toggle("is-open");
+    });
+  }
+
+  const keyOfficesLabel = document.getElementById("keyOfficesLabel");
+  const keyOfficesSection = keyOfficesLabel ? keyOfficesLabel.closest(".key-offices-section") : null;
+  if (keyOfficesLabel && keyOfficesSection) {
+    keyOfficesLabel.addEventListener("click", () => {
+      keyOfficesSection.classList.toggle("is-collapsed");
     });
   }
 

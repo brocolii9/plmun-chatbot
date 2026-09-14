@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from . import nlp
 from .auth import create_token, get_principal, hash_password, verify_password
@@ -467,6 +467,62 @@ def new_conversation(
         "title": cast(str, conv.title),
         "started_at": conv.started_at.isoformat(),
     }
+
+
+class RenameConversationRequest(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+
+
+@app.put("/api/chat/conversations/{conv_id}")
+def rename_conversation(
+    conv_id: int,
+    payload: RenameConversationRequest,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(get_principal),
+):
+    conv = (
+        db.query(Conversation)
+        .filter(Conversation.id == conv_id)
+        .first()
+    )
+
+    if not conv or not _conv_belongs_to(conv, principal):
+        raise HTTPException(
+            status_code=404,
+            detail="Conversation not found.",
+        )
+
+    conv.title = payload.title.strip()
+    db.commit()
+
+    return {
+        "id": cast(int, conv.id),
+        "title": cast(str, conv.title),
+    }
+
+
+@app.delete("/api/chat/conversations/{conv_id}", status_code=204)
+def delete_conversation(
+    conv_id: int,
+    db: Session = Depends(get_db),
+    principal: dict = Depends(get_principal),
+):
+    conv = (
+        db.query(Conversation)
+        .filter(Conversation.id == conv_id)
+        .first()
+    )
+
+    if not conv or not _conv_belongs_to(conv, principal):
+        raise HTTPException(
+            status_code=404,
+            detail="Conversation not found.",
+        )
+
+    db.delete(conv)
+    db.commit()
+
+    return None
 
 
 def _require_admin_principal(principal: dict = Depends(get_principal)) -> dict:
