@@ -59,7 +59,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -466,8 +469,17 @@ def new_conversation(
     }
 
 
+def _require_admin_principal(principal: dict = Depends(get_principal)) -> dict:
+    if principal.get("kind") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required.")
+    return principal
+
+
 @app.post("/api/admin/retrain")
-def retrain(db: Session = Depends(get_db)):
+def retrain(
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
     n = nlp.retrain_from_db(db)
 
     return {
@@ -476,10 +488,12 @@ def retrain(db: Session = Depends(get_db)):
     }
 
 @app.get("/api/admin/analytics")
-def analytics(db: Session = Depends(get_db)):
+def analytics(
+    db: Session = Depends(get_db),
+    principal: dict = Depends(_require_admin_principal),
+):
     """
     Returns usage analytics computed from the messages table.
-    No auth required for now — add admin auth in a later sprint.
     """
     from sqlalchemy import func, desc
     from datetime import datetime, timedelta, date
@@ -599,12 +613,6 @@ def admin_login(payload: LoginRequest, db: Session = Depends(get_db)):
         role=admin.role,
         full_name=admin.full_name,
     )
-
-
-def _require_admin_principal(principal: dict = Depends(get_principal)) -> dict:
-    if principal.get("kind") != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required.")
-    return principal
 
 
 @app.get("/api/admin/me")

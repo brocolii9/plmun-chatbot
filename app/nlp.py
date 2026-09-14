@@ -18,7 +18,7 @@ def preprocess(text: str) -> str:
     text = _WS_RE.sub(" ", text)
     return text
 
-_FIL_MARKERS = {"paano", "ano", "mga", "ng", "sa", "ako", "ko", "kailangan", "gusto", "saan", "para", "makita", "kumuha", "mag", "ngayon", "ba", "po", "ang", "hindi", "pwede", "kelan", "kailan", "ito", "iyan", "yung", "naman", "salamat", "documents", "requirements", "enroll", "mag-enroll", "meron"}
+_FIL_MARKERS = {"paano", "ano", "mga", "ng", "sa", "ako", "ko", "kailangan", "gusto", "saan", "para", "makita", "kumuha", "mag", "ngayon", "ba", "po", "ang", "hindi", "pwede", "kelan", "kailan", "ito", "iyan", "yung", "naman", "salamat", "meron"}
 
 def detect_language(text: str) -> str:
     tokens = set(preprocess(text).split())

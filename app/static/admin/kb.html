@@ -12,32 +12,63 @@
 
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#" aria-label="Toggle sidebar" title="Toggle sidebar"><i class="fas fa-bars" aria-hidden="true"></i></a></li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button" aria-label="Toggle sidebar" title="Toggle sidebar">
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-user"></i> <span id="adminName" class="ml-1">Admin</span>
+          <i class="far fa-user"></i>
+          <span id="adminName" class="ml-1">Admin</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-          <a href="#" class="dropdown-item" id="logoutBtn"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+          <a href="#" class="dropdown-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </a>
         </div>
       </li>
     </ul>
   </nav>
 
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="/admin/dashboard" class="brand-link"><span class="brand-text font-weight-bold ml-2">PLMun Admin</span></a>
+    <a href="/admin/dashboard" class="brand-link">
+      <span class="brand-text font-weight-bold ml-2">PLMun Admin</span>
+    </a>
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info"><a href="#" class="d-block" id="sidebarName">Admin</a></div>
+        <div class="info">
+          <a href="#" class="d-block" id="sidebarName">Admin</a>
+        </div>
       </div>
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
-          <li class="nav-item"><a href="/admin/dashboard" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Dashboard</p></a></li>
-          <li class="nav-item"><a href="/admin/kb" class="nav-link active"><i class="nav-icon fas fa-database"></i><p>Knowledge Base</p></a></li>
-          <li class="nav-item"><a href="/admin/logs" class="nav-link"><i class="nav-icon fas fa-comments"></i><p>Conversation Logs</p></a></li>
-          <li class="nav-item"><a href="/" class="nav-link"><i class="nav-icon fas fa-arrow-left"></i><p>Back to Student Site</p></a></li>
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a href="/admin/dashboard" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/kb" class="nav-link active">
+              <i class="nav-icon fas fa-database"></i>
+              <p>Knowledge Base</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/logs" class="nav-link">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>Conversation Logs</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/" class="nav-link">
+              <i class="nav-icon fas fa-arrow-left"></i>
+              <p>Back to Student Site</p>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -49,7 +80,9 @@
         <div class="row mb-2">
           <div class="col-sm-6"><h1 class="m-0">Knowledge Base</h1></div>
           <div class="col-sm-6 text-right">
-            <button class="btn btn-success" id="newEntryBtn"><i class="fas fa-plus mr-1"></i>New Entry</button>
+            <button class="btn btn-success" id="newEntryBtn">
+              <i class="fas fa-plus mr-1"></i>New Entry
+            </button>
           </div>
         </div>
       </div>
@@ -79,7 +112,9 @@
     </section>
   </div>
 
-  <footer class="main-footer"><strong>PLMun Chatbot Admin</strong> — Capstone Project 2026</footer>
+  <footer class="main-footer">
+    <strong>PLMun Chatbot Admin</strong> — Capstone Project 2026
+  </footer>
 </div>
 
 <div class="modal fade" id="editModal" tabindex="-1">
@@ -92,28 +127,28 @@
       <div class="modal-body">
         <input type="hidden" id="editId">
         <div class="form-group">
-  <label for="editCategory">Category</label>
-  <select class="form-control" id="editCategory" aria-label="Category">
-    <option value="enrollment">Enrollment</option>
-    <option value="documents">Documents</option>
-    <option value="scholarship">Scholarship</option>
-    <option value="graduation">Graduation</option>
-    <option value="schedule">Schedule</option>
-    <option value="policy">Policy</option>
-  </select>
-</div>
-<div class="form-group">
-  <label for="editQuestion">Question</label>
-  <input type="text" class="form-control" id="editQuestion" aria-label="Question">
-</div>
-<div class="form-group">
-  <label for="editAnswerEn">Answer (English)</label>
-  <textarea class="form-control" id="editAnswerEn" rows="4" aria-label="Answer in English"></textarea>
-</div>
-<div class="form-group">
-  <label for="editAnswerFil">Answer (Filipino)</label>
-  <textarea class="form-control" id="editAnswerFil" rows="4" aria-label="Answer in Filipino"></textarea>
-</div>
+          <label for="editCategory">Category</label>
+          <select class="form-control" id="editCategory" aria-label="Category">
+            <option value="enrollment">Enrollment</option>
+            <option value="documents">Documents</option>
+            <option value="scholarship">Scholarship</option>
+            <option value="graduation">Graduation</option>
+            <option value="schedule">Schedule</option>
+            <option value="policy">Policy</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editQuestion">Question</label>
+          <input type="text" class="form-control" id="editQuestion" aria-label="Question">
+        </div>
+        <div class="form-group">
+          <label for="editAnswerEn">Answer (English)</label>
+          <textarea class="form-control" id="editAnswerEn" rows="4" aria-label="Answer in English"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="editAnswerFil">Answer (Filipino)</label>
+          <textarea class="form-control" id="editAnswerFil" rows="4" aria-label="Answer in Filipino"></textarea>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
