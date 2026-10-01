@@ -1,6 +1,24 @@
 /* PLMun Chatbot — Frontend integration with FastAPI backend */
 
-const API = "";
+// API base URL detection
+const API = (() => {
+  const isCapacitor = window.location.protocol === "capacitor:" ||
+                     (window.location.hostname === "localhost" && 
+                      window.location.port !== "8000" &&
+                      navigator.userAgent.includes("wv"));
+  
+  if (isCapacitor) {
+    // Inside Capacitor app — use PC's local IP
+    return localStorage.getItem("plmun_api_base") || "http://192.168.1.15:8000";
+  }
+  
+  // Served from FastAPI web
+  if (window.location.port === "8000") return "";
+  
+  return localStorage.getItem("plmun_api_base") || "";
+})();
+
+console.log("[API] Base URL:", API || "(same-origin)");
 
 function saveSession(data) {
   localStorage.setItem("plmun_token", data.access_token);

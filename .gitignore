@@ -1,8 +1,16 @@
-.venv/
-venv/
-__pycache__/
-*.pyc
-*.db
-.env
-.vscode/
-.idea/
+# Capacitor / Android
+node_modules/
+android/
+capacitor.config.json
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Gradle
+.gradle/
+build/
+local.properties
