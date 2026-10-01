@@ -2,20 +2,31 @@
 
 // API base URL detection
 const API = (() => {
-  const isCapacitor = window.location.protocol === "capacitor:" ||
-                     (window.location.hostname === "localhost" && 
-                      window.location.port !== "8000" &&
-                      navigator.userAgent.includes("wv"));
-  
+  const isCapacitor = 
+    window.location.protocol === "capacitor:" ||
+    window.location.protocol === "file:" ||
+    (window.location.hostname === "localhost" && window.location.port === "") ||
+    (window.location.hostname === "localhost" && window.location.port !== "8000");
+
+  console.log("[API Detect] protocol:", window.location.protocol);
+  console.log("[API Detect] hostname:", window.location.hostname);
+  console.log("[API Detect] port:", window.location.port);
+  console.log("[API Detect] isCapacitor:", isCapacitor);
+
   if (isCapacitor) {
-    // Inside Capacitor app — use PC's local IP
-    return localStorage.getItem("plmun_api_base") || "http://192.168.1.15:8000";
+    const base = localStorage.getItem("plmun_api_base") || "http://192.168.1.8:8000";
+    console.log("[API] Mobile mode →", base);
+    return base;
   }
-  
-  // Served from FastAPI web
-  if (window.location.port === "8000") return "";
-  
-  return localStorage.getItem("plmun_api_base") || "";
+
+  if (window.location.port === "8000") {
+    console.log("[API] Web mode → same-origin");
+    return "";
+  }
+
+  const fallback = localStorage.getItem("plmun_api_base") || "";
+  console.log("[API] Fallback →", fallback || "(empty)");
+  return fallback;
 })();
 
 console.log("[API] Base URL:", API || "(same-origin)");
@@ -72,7 +83,7 @@ function initLoginPage() {
     document.getElementById("guestLink").addEventListener("click", async (e) => {
       e.preventDefault();
       try {
-        const res = await fetch("/api/auth/guest", { method: "POST" });
+        const res = await fetch(API + "/api/auth/guest", { method: "POST" });
         const data = await res.json();
         saveSession(data);
         window.location.href = "/main_page.html";
@@ -87,7 +98,7 @@ function initLoginPage() {
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(API + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -127,7 +138,7 @@ function initSignupPage() {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(API + "/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name, email, password, confirm_password }),
@@ -157,11 +168,7 @@ function initChatPage() {
     return;
   }
 
-    // Voice preference: 'default' | 'female' | 'male'
   let voicePreference = localStorage.getItem("plmun_voice_pref") || "default";
-
-    // ---------- Developer mode ----------
-  // Toggle with ?debug=1 in URL, or press Ctrl+Shift+D on the page
   let devMode = new URLSearchParams(window.location.search).get("debug") === "1";
 
   document.addEventListener("keydown", (e) => {
@@ -178,7 +185,6 @@ function initChatPage() {
       setTimeout(() => toast.remove(), 1800);
     }
   });
-
 
   const chatInput = document.getElementById("chatInput");
   const chatMessages = document.getElementById("chatMessages");
@@ -199,7 +205,7 @@ function initChatPage() {
   let conversationId = null;
   let firstUserMessageSent = false;
 
-   function addBubble(sender, text, meta, intent, lang) {
+  function addBubble(sender, text, meta, intent, lang) {
     const wrap = document.createElement("div");
     wrap.className = "message " + (sender === "student" ? "user" : "bot");
 
@@ -211,7 +217,6 @@ function initChatPage() {
     bubble.className = "bubble";
     bubble.textContent = text;
 
-    // Store intent + lang for TTS
     if (sender === "bot") {
       if (intent) bubble.dataset.intent = intent;
       if (lang)   bubble.dataset.lang = lang;
@@ -528,7 +533,6 @@ function initChatPage() {
     });
   });
 
-    // ---------- Voice preference buttons (in Settings modal) ----------
   function applyVoiceButtonState() {
     document.querySelectorAll(".voice-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.voice === voicePreference);
@@ -556,7 +560,7 @@ function initChatPage() {
 
   const voiceBtn = document.getElementById("voiceButton");
   const speakBtn = document.getElementById("speakButton");
-    if (voiceBtn) {
+  if (voiceBtn) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
@@ -571,7 +575,6 @@ function initChatPage() {
 
       let listening = false;
 
-      // Detect language: if user typed Tagalog before, use fil-PH; else en-PH
       function pickLang() {
         const lastUser = chatMessages.querySelector(".message.user .bubble");
         if (lastUser) {
@@ -589,9 +592,7 @@ function initChatPage() {
         recognition.lang = pickLang();
         try {
           recognition.start();
-        } catch (e) {
-          // Already started — ignore
-        }
+        } catch (e) {}
       });
 
       recognition.onstart = () => {
@@ -615,12 +616,8 @@ function initChatPage() {
         listening = false;
         voiceBtn.classList.remove("is-listening");
         chatInput.placeholder = "Type your question here...";
-
-        // Auto-send if we captured text
         const text = chatInput.value.trim();
-        if (text) {
-          sendMessage();
-        }
+        if (text) sendMessage();
       };
 
       recognition.onerror = (event) => {
@@ -634,19 +631,20 @@ function initChatPage() {
     }
   }
 
-  // ---------- TTS (Read Aloud) ----------
-    // ---------- TTS (Read Aloud) with toggle ----------
-  // ---------- TTS (Read Aloud) with improved voice selection ----------
-  // ---------- TTS with pre-recorded audio + Web Speech fallback ----------
-    // ---------- TTS with gender preference ----------
   if (speakBtn) {
     let currentAudio = null;
 
-    let cachedVoices = [];
-    function loadVoices() { cachedVoices = window.speechSynthesis.getVoices(); }
-    loadVoices();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
+       let cachedVoices = [];
+    if (window.speechSynthesis) {
+      function loadVoices() {
+        cachedVoices = window.speechSynthesis.getVoices();
+      }
+      loadVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    } else {
+      console.warn("[TTS] speechSynthesis not available in this environment");
     }
 
     const FEMALE_NAMES = ["zira", "hazel", "susan", "samantha", "victoria", "karen",
@@ -697,16 +695,23 @@ function initChatPage() {
         currentAudio.currentTime = 0;
         currentAudio = null;
       }
-      window.speechSynthesis.cancel();
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
       speakBtn.classList.remove("is-listening");
       speakBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
     }
 
     function speakWithWebSpeech(text, lang, genderPref) {
+      if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
+        console.warn("[TTS] Speech synthesis not supported in this environment");
+        return;
+      }
       const utter = new SpeechSynthesisUtterance(text);
       const voice = findVoice(lang, genderPref);
       console.log("[TTS] speakWithWebSpeech → genderPref:", genderPref, "| voice:", voice ? voice.name : "NONE");
       if (voice) utter.voice = voice;
+  
 
       utter.lang = lang === "fil" ? "fil-PH" : "en-US";
       utter.rate = 0.9;
@@ -724,7 +729,7 @@ function initChatPage() {
     }
 
     speakBtn.addEventListener("click", async () => {
-      if (currentAudio || window.speechSynthesis.speaking) {
+      if (currentAudio || (window.speechSynthesis && window.speechSynthesis.speaking)) {
         stopAll();
         return;
       }
@@ -746,7 +751,7 @@ function initChatPage() {
 
       console.log("[TTS] Using default MP3");
       if (intent) {
-        const audioPath = `/audio/${intent}_${lang}.mp3`;
+        const audioPath = API + `/audio/${intent}_${lang}.mp3`;
         try {
           const audio = new Audio(audioPath);
           currentAudio = audio;
@@ -772,7 +777,6 @@ function initChatPage() {
       speakWithWebSpeech(text, lang, "default");
     });
   }
-
 
   loadSuggestions();
   loadRecent();

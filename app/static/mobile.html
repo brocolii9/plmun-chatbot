@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0d3b2e">
+<title>PLMun AI — Student Services Assistant</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
+</head>
+<body class="mobile-app-body" style="position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;overflow:hidden;margin:0;padding:0;">
+
+<!-- ================================================================
+     MOBILE HEADER
+     ================================================================ -->
+<header class="m-header">
+  <div class="m-header-decor decor-1"></div>
+  <div class="m-header-decor decor-2"></div>
+
+  <div class="m-header-row">
+    <img src="images/logo.png" alt="PLMun" class="m-logo" onerror="this.style.visibility='hidden'">
+    <div class="m-brand">
+      <h1>PLMun <span>AI</span></h1>
+      <p>Student Services Assistant</p>
+      <div class="m-online">
+        <span class="m-online-dot"></span>
+        <span>Online</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================================================================
+     CHAT AREA
+     ================================================================ -->
+<main class="m-chat" id="chatMessages">
+  <div class="m-message m-bot">
+    <div class="m-avatar m-avatar-bot">
+      <i class="fa-solid fa-robot"></i>
+    </div>
+    <div class="m-bubble-wrap">
+      <div class="m-bubble m-bubble-bot" id="welcomeBubble">
+        Hello, Student! 👋<br><br>
+        Welcome to the <strong>PLMun AI Student Services Assistant</strong>.<br><br>
+        I'm here to help you find information about university services and student concerns.
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================================================================
+     POPULAR SERVICES (shown before first message)
+     ================================================================ -->
+<section class="m-popular" id="popularServices">
+  <div class="m-popular-header">
+    <i class="fa-solid fa-star"></i>
+    <span>Popular Services</span>
+  </div>
+  <div class="m-popular-grid" id="popularServicesGrid"></div>
+  <div class="m-popular-dots" id="popularServicesDots"></div>
+</section>
+
+<!-- ================================================================
+     INPUT BAR
+     ================================================================ -->
+<form class="m-input-bar" id="chatForm">
+  <button type="button" class="m-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div class="m-input-wrap">
+    <input type="text" id="chatInput" placeholder="Ask PLMun AI anything..." autocomplete="off">
+    <button type="button" class="m-mic-btn" id="voiceButton" aria-label="Voice">
+      <i class="fa-solid fa-microphone"></i>
+    </button>
+  </div>
+
+  <button type="submit" class="m-send-btn" id="sendBtn" aria-label="Send">
+    <i class="fa-solid fa-paper-plane"></i>
+  </button>
+</form>
+
+<!-- ================================================================
+     BOTTOM NAV
+     ================================================================ -->
+<nav class="m-bottom-nav">
+  <button type="button" class="m-nav-tab is-active" data-tab="home">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </button>
+  <button type="button" class="m-nav-tab" data-tab="history" id="navHistory">
+    <i class="fa-regular fa-comment-dots"></i>
+    <span>Chat History</span>
+  </button>
+  <button type="button" class="m-nav-tab" data-tab="about" id="navAbout">
+    <i class="fa-regular fa-user"></i>
+    <span>About</span>
+  </button>
+</nav>
+
+<!-- ================================================================
+     DRAWER (side menu)
+     ================================================================ -->
+<div class="m-drawer-backdrop" id="drawerBackdrop"></div>
+
+<aside class="m-drawer" id="drawer">
+  <div class="m-drawer-header">
+    <h2>PLMun AI</h2>
+    <button type="button" class="m-drawer-close" id="drawerClose" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <button type="button" class="m-new-chat" id="newChatBtn">
+    <i class="fa-solid fa-plus"></i>
+    <span>New Chat</span>
+  </button>
+
+  <div class="m-drawer-section">
+    <p class="m-drawer-label">Recent Chats</p>
+    <ul class="m-recents-list" id="recentsList">
+      <li class="m-recent-empty" id="recentsEmptyState">No recent chats yet</li>
+    </ul>
+  </div>
+
+  <div class="m-drawer-section">
+    <p class="m-drawer-label">Contact</p>
+    <div class="m-contact-row">
+      <i class="fa-solid fa-location-dot"></i>
+      <span>University Road, NBP Reservation, Muntinlupa</span>
+    </div>
+    <div class="m-contact-row">
+      <i class="fa-solid fa-phone"></i>
+      <span>02-8248-9161</span>
+    </div>
+    <div class="m-contact-row">
+      <i class="fa-solid fa-envelope"></i>
+      <span>plmuncomm@plmun.edu.ph</span>
+    </div>
+    <div class="m-contact-row">
+      <i class="fa-solid fa-clock"></i>
+      <span>Mon–Fri 7AM–6PM · Sat 8AM–12PM</span>
+    </div>
+  </div>
+
+  <button type="button" class="m-logout-btn" id="logoutLink">
+    <i class="fa-solid fa-sign-out-alt"></i>
+    <span>Logout</span>
+  </button>
+</aside>
+
+<!-- ================================================================
+     ABOUT / SETTINGS SHEET
+     ================================================================ -->
+<div class="m-sheet-backdrop" id="sheetBackdrop"></div>
+<div class="m-sheet" id="aboutSheet">
+  <div class="m-sheet-handle"></div>
+  <div class="m-sheet-header">
+    <h3>About &amp; Settings</h3>
+    <button type="button" class="m-sheet-close" id="sheetClose">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="m-sheet-body">
+    <div class="m-sheet-section">
+      <p class="m-sheet-label">Voice</p>
+      <div class="m-toggle-group">
+        <button type="button" class="voice-btn active" data-voice="default">Default</button>
+        <button type="button" class="voice-btn" data-voice="female">Female</button>
+        <button type="button" class="voice-btn" data-voice="male">Male</button>
+      </div>
+      <p class="m-sheet-help" id="voiceHelp">Default uses the pre-recorded voice.</p>
+    </div>
+
+    <div class="m-sheet-section">
+      <p class="m-sheet-label">About</p>
+      <p class="m-sheet-help">
+        PLMun AI is a bilingual virtual assistant for the PLMun Registrar's Office.
+        Answers come strictly from a curated knowledge base — the system never guesses.
+      </p>
+      <p class="m-sheet-help">Version 1.0 · Capstone 2026</p>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden compatibility elements for script.js -->
+<div style="display:none;">
+  <button id="speakButton"><i class="fa-solid fa-volume-high"></i></button>
+  <button id="settingsTrigger"></button>
+  <div id="settingsModal" class="modal-backdrop" aria-hidden="true">
+    <div class="settings-modal">
+      <button class="settings-close" id="closeSettings"></button>
+      <div class="toggle-group">
+        <button class="lang-btn active" data-language="en"></button>
+        <button class="lang-btn" data-language="tl"></button>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoomOutBtn"></button>
+        <input type="range" id="zoomRange" min="80" max="140" step="10" value="100">
+        <button class="zoom-btn" id="zoomInBtn"></button>
+      </div>
+      <p class="zoom-value" id="zoomValue">100%</p>
+      <div class="quick-options is-hidden" id="quickOptions"></div>
+      <div class="chat-empty-state" id="chatEmptyState"></div>
+      <div id="sidebarName"></div>
+      <div id="supportSidebar"></div>
+      <div id="sidebarToggle"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/script.js"></script>
+<script src="/js/mobile.js"></script>
+</body>
+</html>
