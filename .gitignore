@@ -6,3 +6,37 @@ __pycache__/
 .env
 .vscode/
 .idea/
+
+# Python virtual environment
+.venv/
+venv/
+
+# Environment / secrets
+.env
+.env.*
+
+# Keep example environment file
+!.env.example
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Node dependencies
+node_modules/
+
+# Android generated files
+android/.gradle/
+android/build/
+android/app/build/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -7,7 +7,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./plmun.db")
 JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret-do-not-use-in-prod")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))
-CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.30"))
+CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.20"))
 
 REGISTRAR_REFERRAL_EN = (
     "I'm sorry, I don't have a verified answer for that in my knowledge base, "
