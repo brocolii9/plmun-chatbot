@@ -11,16 +11,18 @@ html {
 }
 
 body.mobile-app-body {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr auto auto !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  max-height: none !important;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   color: #1f2d2a;
   background: #f4f9f6;
@@ -123,91 +125,127 @@ body.mobile-app-body {
 /* ================================================================
    CHAT AREA
    ================================================================ */
+/* ================================================================
+   CHAT AREA
+   ================================================================ */
 .m-chat {
-  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 18px 16px 8px;
+  padding: 18px 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   background: #f4f9f6;
   -webkit-overflow-scrolling: touch;
+  text-align: left;
 }
+
+/* ================================================================
+   MESSAGES — bot left, user right
+   ================================================================ */
 
 .m-message {
   display: flex;
   gap: 8px;
   align-items: flex-start;
-  max-width: 90%;
-}
-.m-message.m-user {
-  flex-direction: row-reverse;
-  align-self: flex-end;
+  max-width: 82%;
+  width: fit-content;
+  text-align: left;
 }
 
+/* Bot — LEFT side */
+.m-message.m-bot {
+  align-self: flex-start;
+  flex-direction: row;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* User — RIGHT side, no avatar */
+.m-message.m-user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* Avatar — bot only */
 .m-avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 16px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 .m-avatar-bot {
   background: #dff7ec;
   color: #0d5238;
 }
-.m-avatar-user {
-  background: #0d5238;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
+
+/* Bubble wrapper */
+.m-bubble-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+  max-width: 100%;
 }
 
-.m-bubble-wrap { display: flex; flex-direction: column; gap: 4px; }
-
+/* Bubble base */
 .m-bubble {
-  padding: 12px 15px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 18px;
   font-size: 14.5px;
   line-height: 1.5;
   word-wrap: break-word;
   white-space: pre-wrap;
+  text-align: left;
+  width: fit-content;
+  max-width: 100%;
 }
 
+/* Bot bubble — white, tail bottom-left */
 .m-bubble-bot {
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #e6efea;
   border-top-left-radius: 6px;
   color: #1f2d2a;
   box-shadow: 0 2px 6px rgba(10, 61, 42, 0.04);
+  text-align: left;
 }
 
+/* User bubble — green, tail top-right */
 .m-bubble-user {
   background: #0d5238;
-  color: #fff;
+  color: #ffffff;
   border-top-right-radius: 6px;
+  box-shadow: 0 2px 6px rgba(13, 82, 56, 0.15);
 }
 
+/* Meta */
 .m-meta {
   font-size: 11px;
   color: #7b8a85;
   padding-left: 4px;
+  text-align: left;
 }
 
 /* ================================================================
    POPULAR SERVICES
    ================================================================ */
 .m-popular {
-  flex: 0 0 auto;
-  padding: 4px 16px 14px;
-  background: #f4f9f6;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0 12px;
+  background: transparent;
   transition: opacity 0.2s;
 }
-.m-popular.is-hidden { display: none; }
+.m-popular.is-hidden { display: none !important; }
 
 .m-popular-header {
   display: flex;
@@ -641,3 +679,67 @@ body.mobile-app-body {
 
 /* Utility */
 .is-hidden { display: none !important; }
+
+.m-chat,
+.m-chat *,
+.m-message,
+.m-message *,
+.m-bubble,
+.m-bubble *,
+.m-bubble-bot,
+.m-bubble-bot *,
+.m-bubble-user,
+.m-bubble-user *,
+.m-bubble-wrap,
+.m-bubble-wrap * {
+  text-align: left !important;
+}
+
+
+/* Force bubble to fit content */
+.m-bubble {
+  display: inline-block !important;
+}
+
+/* Force message row to fit content */
+.m-message {
+  width: fit-content !important;
+}
+
+/* Force text left-aligned INSIDE bubbles */
+.m-bubble,
+.m-bubble-bot,
+.m-bubble-user {
+  text-align: left !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  text-indent: 0 !important;
+}
+
+/* Force bubble to shrink to content */
+.m-bubble {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+/* Force wrap to fit content */
+.m-bubble-wrap {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: 100% !important;
+  text-align: left !important;
+}
+
+/* Force message row to fit content */
+.m-message {
+  width: fit-content !important;
+  max-width: 85% !important;
+  text-align: left !important;
+}
+
+/* Force chat container to align items to start */
+.m-chat {
+  align-items: flex-start !important;
+  text-align: left !important;
+}

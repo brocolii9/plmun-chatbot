@@ -13,6 +13,18 @@ const API = (() => {
   console.log("[API Detect] port:", window.location.port);
   console.log("[API Detect] isCapacitor:", isCapacitor);
 
+  // Helper: return the correct "post-login" page depending on environment
+function getPostLoginUrl() {
+  // Detect Capacitor (mobile app)
+  const isCapacitor =
+    window.location.protocol === "capacitor:" ||
+    window.location.protocol === "file:" ||
+    (window.location.hostname === "localhost" && window.location.port === "") ||
+    (window.location.hostname === "localhost" && window.location.port !== "8000");
+
+  return isCapacitor ? "/mobile.html" : "/main_page.html";
+}
+
   if (isCapacitor) {
     const base = localStorage.getItem("plmun_api_base") || "http://192.168.1.8:8000";
     console.log("[API] Mobile mode →", base);
@@ -85,8 +97,8 @@ function initLoginPage() {
       try {
         const res = await fetch(API + "/api/auth/guest", { method: "POST" });
         const data = await res.json();
-        saveSession(data);
-        window.location.href = "/main_page.html";
+                saveSession(data);
+        window.location.href = getPostLoginUrl();
       } catch (_) {
         showMessage(msgEl, "Could not start guest session.", "error");
       }
@@ -108,8 +120,8 @@ function initLoginPage() {
         showMessage(msgEl, data.detail || "Invalid email or password.", "error");
         return;
       }
-      saveSession(data);
-      window.location.href = "/main_page.html";
+            saveSession(data);
+      window.location.href = getPostLoginUrl();
     } catch (_) {
       showMessage(msgEl, "Network error. Please try again.", "error");
     }

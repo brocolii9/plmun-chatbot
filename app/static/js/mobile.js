@@ -1,63 +1,10 @@
 /* PLMun Chatbot — MOBILE UI logic
    Only loaded on mobile.html
-   Works alongside script.js — uses the same DOM IDs where possible.
+   Automatically upgrades bubbles created by script.js to mobile styles.
 */
 
 (function () {
   "use strict";
-
-  // ============================================================
-  // POPULAR SERVICES
-  // ============================================================
-  const POPULAR = [
-    { icon: "fa-graduation-cap", title: "Enrollment",         prompt: "How do I enroll?" },
-    { icon: "fa-star",           title: "Scholarships",       prompt: "What scholarships are available?" },
-    { icon: "fa-file-lines",     title: "Academic Records",   prompt: "How do I request a document?" },
-    { icon: "fa-calendar-days",  title: "Class Schedule",     prompt: "Where can I see my class schedule?" },
-    { icon: "fa-heart-pulse",    title: "Health Services",    prompt: "Where can I get medical assistance?" },
-    { icon: "fa-comments",       title: "Guidance",           prompt: "How can I talk to a counselor?" }
-  ];
-
-  function renderPopular() {
-    const grid = document.getElementById("popularServicesGrid");
-    const dots = document.getElementById("popularServicesDots");
-    if (!grid) return;
-
-    grid.innerHTML = "";
-    POPULAR.slice(0, 4).forEach((svc) => {
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "m-ps-card";
-      card.innerHTML = `
-        <span class="m-ps-icon"><i class="fa-solid ${svc.icon}"></i></span>
-        <span class="m-ps-title">${svc.title}</span>
-      `;
-      card.addEventListener("click", () => {
-        const input = document.getElementById("chatInput");
-        const form = document.getElementById("chatForm");
-        if (input && form) {
-          input.value = svc.prompt;
-          form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-        }
-        hidePopular();
-      });
-      grid.appendChild(card);
-    });
-
-    if (dots) {
-      dots.innerHTML = "";
-      for (let i = 0; i < 3; i++) {
-        const d = document.createElement("span");
-        d.className = "dot" + (i === 0 ? " is-active" : "");
-        dots.appendChild(d);
-      }
-    }
-  }
-
-  function hidePopular() {
-    const el = document.getElementById("popularServices");
-    if (el) el.classList.add("is-hidden");
-  }
 
   // ============================================================
   // DRAWER
@@ -106,7 +53,7 @@
   }
 
   // ============================================================
-  // BOTTOM NAV — History opens drawer
+  // BOTTOM NAV
   // ============================================================
   function initBottomNav() {
     const tabs = document.querySelectorAll(".m-nav-tab");
@@ -130,41 +77,81 @@
   }
 
   // ============================================================
-  // HIDE POPULAR AFTER FIRST USER MESSAGE
+  // BUBBLE UPGRADER — converts script.js bubbles to mobile classes
+  // script.js creates: <div class="message bot|user"><span class="avatar">…</span><div class="bubble">…</div></div>
+  // Mobile needs:      <div class="m-message m-bot|m-user"><span class="m-avatar …">…</span><div class="m-bubble-wrap"><div class="m-bubble …">…</div></div></div>
   // ============================================================
-  function watchFirstMessage() {
-    const form = document.getElementById("chatForm");
-    if (!form) return;
-    form.addEventListener("submit", hidePopular, true);
+  function upgradeBubble(node) {
+    if (!node || node.nodeType !== 1) return;
+    if (node.classList.contains("m-message")) return;       // already upgraded
+    if (!node.classList.contains("message")) return;         // not a bubble
+
+    const isUser = node.classList.contains("user");
+
+    // 1. Swap the row classes
+    node.classList.remove("message", "user", "bot");
+    node.classList.add("m-message", isUser ? "m-user" : "m-bot");
+
+    // 2. Upgrade the avatar (bot only) — remove user avatar entirely
+    const avatar = node.querySelector(".avatar");
+    if (avatar) {
+      if (isUser) {
+        avatar.remove();
+      } else {
+        avatar.classList.remove("avatar");
+        avatar.classList.add("m-avatar", "m-avatar-bot");
+        // ensure it uses the robot icon
+        if (!avatar.querySelector("i")) {
+          avatar.innerHTML = '<i class="fa-solid fa-robot"></i>';
+        }
+      }
+    }
+
+    // 3. Wrap the bubble
+    const bubble = node.querySelector(".bubble");
+    if (bubble) {
+      bubble.classList.remove("bubble");
+      bubble.classList.add("m-bubble", isUser ? "m-bubble-user" : "m-bubble-bot");
+
+      // Wrap in .m-bubble-wrap if not already
+      const parent = bubble.parentElement;
+      if (!parent.classList.contains("m-bubble-wrap")) {
+        const wrap = document.createElement("div");
+        wrap.className = "m-bubble-wrap";
+        parent.insertBefore(wrap, bubble);
+        wrap.appendChild(bubble);
+      }
+    }
+
+    // 4. Fix alignment: bot left, user right
+    node.style.alignSelf = isUser ? "flex-end" : "flex-start";
   }
 
-  // ============================================================
-  // VOICE BUTTON — bind to script.js logic via existing #voiceButton id
-  // script.js binds to #voiceButton which exists here.
-  // ============================================================
-  // (no extra code needed — script.js handles it)
+  function initBubbleUpgrader() {
+    const chatMessages = document.getElementById("chatMessages");
+    if (!chatMessages) return;
+
+    // Upgrade existing bubbles (including the welcome one if it uses .message)
+    chatMessages.querySelectorAll(".message").forEach(upgradeBubble);
+
+    // Watch for new bubbles added by script.js
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((n) => {
+          if (n.nodeType === 1) upgradeBubble(n);
+        });
+      });
+    });
+    observer.observe(chatMessages, { childList: true, subtree: true });
+  }
 
   // ============================================================
   // BOOT
   // ============================================================
   document.addEventListener("DOMContentLoaded", () => {
-    renderPopular();
     initDrawer();
     initAboutSheet();
     initBottomNav();
-    watchFirstMessage();
+    initBubbleUpgrader();
   });
 })();
-
-  // ============================================================
-  // FORCE VIEWPORT HEIGHT (fixes Capacitor WebView mismatch)
-  // ============================================================
-  function setAppHeight() {
-    const h = window.innerHeight;
-    document.documentElement.style.setProperty("--app-height", h + "px");
-    document.body.style.height = h + "px";
-    document.body.style.overflow = "hidden";
-  }
-  setAppHeight();
-  window.addEventListener("resize", setAppHeight);
-  window.addEventListener("orientationchange", () => setTimeout(setAppHeight, 100));
