@@ -1,2 +1,0 @@
-# Custom java.security overriding jdk.tls.disabledAlgorithms to disable GCM cipher suites
-jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, RC4, DES, MD5withRSA, DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, GCM, AES_128_GCM, AES_256_GCM
