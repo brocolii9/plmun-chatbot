@@ -7,8 +7,12 @@ function saveSession(data) {
   localStorage.setItem("plmun_kind", data.kind);
   localStorage.setItem("plmun_name", data.full_name || "");
 }
-function getToken() { return localStorage.getItem("plmun_token"); }
-function clearSession() { localStorage.clear(); }
+function getToken() {
+  return localStorage.getItem("plmun_token");
+}
+function clearSession() {
+  localStorage.clear();
+}
 
 function authHeaders() {
   return {
@@ -21,7 +25,7 @@ async function apiFetch(path, options = {}) {
   const headers = Object.assign(
     { "Content-Type": "application/json" },
     options.auth ? authHeaders() : {},
-    options.headers || {}
+    options.headers || {},
   );
   const res = await fetch(API + path, Object.assign({}, options, { headers }));
   if (res.status === 401) {
@@ -51,17 +55,19 @@ function initLoginPage() {
     const anchor = form.querySelector(".create-account");
     (anchor ? anchor.parentNode : form).insertBefore(para, anchor || null);
 
-    document.getElementById("guestLink").addEventListener("click", async (e) => {
-      e.preventDefault();
-      try {
-        const res = await fetch("/api/auth/guest", { method: "POST" });
-        const data = await res.json();
-        saveSession(data);
-        window.location.href = "/main_page.html";
-      } catch (_) {
-        showMessage(msgEl, "Could not start guest session.", "error");
-      }
-    });
+    document
+      .getElementById("guestLink")
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          const res = await fetch("/api/auth/guest", { method: "POST" });
+          const data = await res.json();
+          saveSession(data);
+          window.location.href = "/main_page.html";
+        } catch (_) {
+          showMessage(msgEl, "Could not start guest session.", "error");
+        }
+      });
   }
 
   form.addEventListener("submit", async (e) => {
@@ -76,7 +82,11 @@ function initLoginPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        showMessage(msgEl, data.detail || "Invalid email or password.", "error");
+        showMessage(
+          msgEl,
+          data.detail || "Invalid email or password.",
+          "error",
+        );
         return;
       }
       saveSession(data);
@@ -118,7 +128,8 @@ function initSignupPage() {
       if (!res.ok) {
         let m = "Registration failed.";
         if (typeof data.detail === "string") m = data.detail;
-        else if (Array.isArray(data.detail) && data.detail.length) m = data.detail[0].msg;
+        else if (Array.isArray(data.detail) && data.detail.length)
+          m = data.detail[0].msg;
         showMessage(msgEl, m, "error");
         return;
       }
@@ -139,12 +150,13 @@ function initChatPage() {
     return;
   }
 
-    // Voice preference: 'default' | 'female' | 'male'
+  // Voice preference: 'default' | 'female' | 'male'
   let voicePreference = localStorage.getItem("plmun_voice_pref") || "default";
 
-    // ---------- Developer mode ----------
+  // ---------- Developer mode ----------
   // Toggle with ?debug=1 in URL, or press Ctrl+Shift+D on the page
-  let devMode = new URLSearchParams(window.location.search).get("debug") === "1";
+  let devMode =
+    new URLSearchParams(window.location.search).get("debug") === "1";
 
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "d") {
@@ -154,13 +166,15 @@ function initChatPage() {
         el.style.display = devMode ? "block" : "none";
       });
       const toast = document.createElement("div");
-      toast.textContent = devMode ? "Developer mode: ON" : "Developer mode: OFF";
-      toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#0a8f60;color:white;padding:10px 16px;border-radius:10px;font-size:13px;z-index:9999;font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,0.2)";
+      toast.textContent = devMode
+        ? "Developer mode: ON"
+        : "Developer mode: OFF";
+      toast.style.cssText =
+        "position:fixed;bottom:20px;right:20px;background:#0a8f60;color:white;padding:10px 16px;border-radius:10px;font-size:13px;z-index:9999;font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,0.2)";
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 1800);
     }
   });
-
 
   const chatInput = document.getElementById("chatInput");
   const chatMessages = document.getElementById("chatMessages");
@@ -181,7 +195,7 @@ function initChatPage() {
   let conversationId = null;
   let firstUserMessageSent = false;
 
-   function addBubble(sender, text, meta, intent, lang) {
+  function addBubble(sender, text, meta, intent, lang) {
     const wrap = document.createElement("div");
     wrap.className = "message " + (sender === "student" ? "user" : "bot");
 
@@ -196,7 +210,7 @@ function initChatPage() {
     // Store intent + lang for TTS
     if (sender === "bot") {
       if (intent) bubble.dataset.intent = intent;
-      if (lang)   bubble.dataset.lang = lang;
+      if (lang) bubble.dataset.lang = lang;
     }
 
     wrap.appendChild(avatar);
@@ -206,7 +220,9 @@ function initChatPage() {
     if (meta) {
       const m = document.createElement("div");
       m.className = "dev-meta";
-      m.style.cssText = "font-size:11px;color:#6b7d75;margin-top:4px;margin-left:48px;display:" + (devMode ? "block" : "none");
+      m.style.cssText =
+        "font-size:11px;color:#6b7d75;margin-top:4px;margin-left:48px;display:" +
+        (devMode ? "block" : "none");
       m.textContent = meta;
       chatMessages.appendChild(m);
     }
@@ -214,7 +230,47 @@ function initChatPage() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  function clearMessages() { chatMessages.innerHTML = ""; }
+  function showTypingIndicator() {
+    const existing = document.getElementById("typingIndicator");
+    if (existing) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "message bot typing-message";
+    wrap.id = "typingIndicator";
+    wrap.setAttribute("role", "status");
+    wrap.setAttribute("aria-live", "polite");
+    wrap.setAttribute("aria-label", "PLMun chatbot is typing");
+
+    const avatar = document.createElement("span");
+    avatar.className = "avatar";
+    avatar.textContent = "\u{1F916}";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble typing-bubble";
+
+    bubble.innerHTML = `
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+    `;
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(bubble);
+    chatMessages.appendChild(wrap);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function hideTypingIndicator() {
+    const indicator = document.getElementById("typingIndicator");
+    if (indicator) {
+      indicator.remove();
+    }
+  }
+
+  function clearMessages() {
+    chatMessages.innerHTML = "";
+  }
 
   async function loadSuggestions() {
     if (firstUserMessageSent) return;
@@ -267,7 +323,7 @@ function initChatPage() {
       icon.className = "fa-solid fa-message";
 
       const span = document.createElement("span");
-      span.textContent = c.title || ("Chat #" + c.id);
+      span.textContent = c.title || "Chat #" + c.id;
       span.className = "recent-item-title";
 
       const menuWrap = document.createElement("div");
@@ -285,7 +341,8 @@ function initChatPage() {
       const renameOpt = document.createElement("button");
       renameOpt.type = "button";
       renameOpt.className = "recent-item-dropdown-option";
-      renameOpt.innerHTML = '<i class="fa-solid fa-pen"></i><span>Rename</span>';
+      renameOpt.innerHTML =
+        '<i class="fa-solid fa-pen"></i><span>Rename</span>';
       renameOpt.addEventListener("click", (e) => {
         e.stopPropagation();
         closeAllRecentMenus();
@@ -294,8 +351,10 @@ function initChatPage() {
 
       const deleteOpt = document.createElement("button");
       deleteOpt.type = "button";
-      deleteOpt.className = "recent-item-dropdown-option recent-item-dropdown-option-danger";
-      deleteOpt.innerHTML = '<i class="fa-solid fa-trash"></i><span>Delete</span>';
+      deleteOpt.className =
+        "recent-item-dropdown-option recent-item-dropdown-option-danger";
+      deleteOpt.innerHTML =
+        '<i class="fa-solid fa-trash"></i><span>Delete</span>';
       deleteOpt.addEventListener("click", (e) => {
         e.stopPropagation();
         closeAllRecentMenus();
@@ -330,9 +389,11 @@ function initChatPage() {
     document.querySelectorAll(".recent-item-dropdown.is-open").forEach((el) => {
       el.classList.remove("is-open");
     });
-    document.querySelectorAll(".recent-item-menu-btn.is-active").forEach((el) => {
-      el.classList.remove("is-active");
-    });
+    document
+      .querySelectorAll(".recent-item-menu-btn.is-active")
+      .forEach((el) => {
+        el.classList.remove("is-active");
+      });
   }
 
   document.addEventListener("click", closeAllRecentMenus);
@@ -353,7 +414,9 @@ function initChatPage() {
   }
 
   async function deleteConversation(id) {
-    const confirmed = window.confirm("Delete this chat? This cannot be undone.");
+    const confirmed = window.confirm(
+      "Delete this chat? This cannot be undone.",
+    );
     if (!confirmed) return;
 
     const res = await apiFetch("/api/chat/conversations/" + id, {
@@ -391,13 +454,19 @@ function initChatPage() {
   }
 
   async function newChat() {
-    const res = await apiFetch("/api/chat/conversations", { method: "POST", auth: true });
+    const res = await apiFetch("/api/chat/conversations", {
+      method: "POST",
+      auth: true,
+    });
     if (!res || !res.ok) return;
     const conv = await res.json();
     conversationId = conv.id;
     firstUserMessageSent = false;
     clearMessages();
-    addBubble("bot", "Hello! I'm your PLMun student support assistant. You can ask me about enrollment, grades, documents, or payments.");
+    addBubble(
+      "bot",
+      "Hello! I'm your PLMun student support assistant. You can ask me about enrollment, grades, documents, or payments.",
+    );
     loadSuggestions();
     loadRecent();
   }
@@ -411,37 +480,65 @@ function initChatPage() {
     firstUserMessageSent = true;
     hideSuggestions();
 
+    showTypingIndicator();
+
     try {
       const res = await apiFetch("/api/chat/message", {
         method: "POST",
         auth: true,
-        body: JSON.stringify({ message: text, conversation_id: conversationId }),
+        body: JSON.stringify({
+          message: text,
+          conversation_id: conversationId,
+        }),
       });
-      if (!res) return;
+      if (!res) {
+        hideTypingIndicator();
+        return;
+      }
       if (!res.ok) {
+        hideTypingIndicator();
         const err = await res.json().catch(() => ({}));
-        addBubble("bot", "Sorry, something went wrong: " + (err.detail || "unknown error"));
+        addBubble(
+          "bot",
+          "Sorry, something went wrong: " + (err.detail || "unknown error"),
+        );
         return;
       }
       const data = await res.json();
+      hideTypingIndicator();
       conversationId = data.conversation_id;
 
       let meta = null;
       if (data.intent_matched) {
-        meta = "intent: " + data.intent_matched + " - confidence: " + (data.confidence_score * 100).toFixed(1) + "%";
+        meta =
+          "intent: " +
+          data.intent_matched +
+          " - confidence: " +
+          (data.confidence_score * 100).toFixed(1) +
+          "%";
       } else if (data.out_of_scope) {
         meta = "out of scope - referred to Registrar";
       }
-      const detectedLang = /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|hakbang|bayad|sagot|tanong|mag|ngayon)\b/i.test(text) ? "fil" : "en";
-      const audioIntent = data.intent_matched || (data.out_of_scope ? "referral" : null);
+      const detectedLang =
+        /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|hakbang|bayad|sagot|tanong|mag|ngayon)\b/i.test(
+          text,
+        )
+          ? "fil"
+          : "en";
+      const audioIntent =
+        data.intent_matched || (data.out_of_scope ? "referral" : null);
       addBubble("bot", data.reply, meta, audioIntent, detectedLang);
       loadRecent();
     } catch (_) {
+      hideTypingIndicator();
       addBubble("bot", "Network error. Please try again.");
     }
   }
 
-  chatForm.addEventListener("submit", (e) => { e.preventDefault(); sendMessage(); });
+  chatForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    sendMessage();
+  });
   if (newChatBtn) newChatBtn.addEventListener("click", newChat);
   if (logoutLink) {
     logoutLink.addEventListener("click", (e) => {
@@ -463,7 +560,9 @@ function initChatPage() {
   }
 
   const keyOfficesLabel = document.getElementById("keyOfficesLabel");
-  const keyOfficesSection = keyOfficesLabel ? keyOfficesLabel.closest(".key-offices-section") : null;
+  const keyOfficesSection = keyOfficesLabel
+    ? keyOfficesLabel.closest(".key-offices-section")
+    : null;
   if (keyOfficesLabel && keyOfficesSection) {
     keyOfficesLabel.addEventListener("click", () => {
       keyOfficesSection.classList.toggle("is-collapsed");
@@ -483,7 +582,8 @@ function initChatPage() {
     }
   }
   if (settingsTrigger) settingsTrigger.addEventListener("click", openSettings);
-  if (closeSettings) closeSettings.addEventListener("click", closeSettingsModal);
+  if (closeSettings)
+    closeSettings.addEventListener("click", closeSettingsModal);
   if (settingsModal) {
     settingsModal.addEventListener("click", (e) => {
       if (e.target === settingsModal) closeSettingsModal();
@@ -497,20 +597,30 @@ function initChatPage() {
     if (zoomRange) zoomRange.value = val;
   }
   if (zoomRange) {
-    zoomRange.addEventListener("input", () => applyZoom(parseInt(zoomRange.value, 10)));
+    zoomRange.addEventListener("input", () =>
+      applyZoom(parseInt(zoomRange.value, 10)),
+    );
     applyZoom(parseInt(zoomRange.value, 10));
   }
-  if (zoomInBtn) zoomInBtn.addEventListener("click", () => applyZoom(parseInt(zoomRange.value, 10) + 10));
-  if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => applyZoom(parseInt(zoomRange.value, 10) - 10));
+  if (zoomInBtn)
+    zoomInBtn.addEventListener("click", () =>
+      applyZoom(parseInt(zoomRange.value, 10) + 10),
+    );
+  if (zoomOutBtn)
+    zoomOutBtn.addEventListener("click", () =>
+      applyZoom(parseInt(zoomRange.value, 10) - 10),
+    );
 
   document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".lang-btn").forEach((b) => b.classList.remove("active"));
+      document
+        .querySelectorAll(".lang-btn")
+        .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
 
-    // ---------- Voice preference buttons (in Settings modal) ----------
+  // ---------- Voice preference buttons (in Settings modal) ----------
   function applyVoiceButtonState() {
     document.querySelectorAll(".voice-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.voice === voicePreference);
@@ -521,8 +631,8 @@ function initChatPage() {
         voicePreference === "default"
           ? "Default uses the pre-recorded voice."
           : voicePreference === "female"
-          ? "Female voice (may not be available on all systems)."
-          : "Male voice (may not be available on all systems).";
+            ? "Female voice (may not be available on all systems)."
+            : "Male voice (may not be available on all systems).";
     }
   }
   applyVoiceButtonState();
@@ -538,12 +648,15 @@ function initChatPage() {
 
   const voiceBtn = document.getElementById("voiceButton");
   const speakBtn = document.getElementById("speakButton");
-    if (voiceBtn) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (voiceBtn) {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       voiceBtn.addEventListener("click", () => {
-        alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
+        alert(
+          "Voice input is not supported in this browser. Please use Chrome or Edge.",
+        );
       });
     } else {
       const recognition = new SpeechRecognition();
@@ -557,7 +670,8 @@ function initChatPage() {
       function pickLang() {
         const lastUser = chatMessages.querySelector(".message.user .bubble");
         if (lastUser) {
-          const filMarkers = /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|mag|ngayon)\b/i;
+          const filMarkers =
+            /\b(paano|ano|mga|ng|sa|ako|kailangan|gusto|saan|para|kumuha|mag|ngayon)\b/i;
           if (filMarkers.test(lastUser.textContent)) return "fil-PH";
         }
         return "en-PH";
@@ -610,42 +724,93 @@ function initChatPage() {
         voiceBtn.classList.remove("is-listening");
         chatInput.placeholder = "Type your question here...";
         if (event.error === "not-allowed") {
-          alert("Microphone access was denied. Please allow mic access in your browser settings.");
+          alert(
+            "Microphone access was denied. Please allow mic access in your browser settings.",
+          );
         }
       };
     }
   }
 
   // ---------- TTS (Read Aloud) ----------
-    // ---------- TTS (Read Aloud) with toggle ----------
+  // ---------- TTS (Read Aloud) with toggle ----------
   // ---------- TTS (Read Aloud) with improved voice selection ----------
   // ---------- TTS with pre-recorded audio + Web Speech fallback ----------
-    // ---------- TTS with gender preference ----------
+  // ---------- TTS with gender preference ----------
   if (speakBtn) {
     let currentAudio = null;
 
     let cachedVoices = [];
-    function loadVoices() { cachedVoices = window.speechSynthesis.getVoices(); }
+    function loadVoices() {
+      cachedVoices = window.speechSynthesis.getVoices();
+    }
     loadVoices();
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
-    const FEMALE_NAMES = ["zira", "hazel", "susan", "samantha", "victoria", "karen",
-                          "moira", "tessa", "fiona", "maria", "catherine", "linda",
-                          "michelle", "clara", "emma", "ava", "allison", "serena",
-                          "joanna", "salli", "kendra", "kimberly", "nicole",
-                          "blessica", "rosa", "female", "woman", "girl"];
-    const MALE_NAMES   = ["david", "mark", "george", "james", "daniel", "alex",
-                          "fred", "tom", "rishi", "ramil", "male", "man", "guy",
-                          "paul", "ryan", "christopher", "eric",
-                          "matthew", "brian", "aaron", "joseph", "william",
-                          "justin", "kevin", "richard"];
+    const FEMALE_NAMES = [
+      "zira",
+      "hazel",
+      "susan",
+      "samantha",
+      "victoria",
+      "karen",
+      "moira",
+      "tessa",
+      "fiona",
+      "maria",
+      "catherine",
+      "linda",
+      "michelle",
+      "clara",
+      "emma",
+      "ava",
+      "allison",
+      "serena",
+      "joanna",
+      "salli",
+      "kendra",
+      "kimberly",
+      "nicole",
+      "blessica",
+      "rosa",
+      "female",
+      "woman",
+      "girl",
+    ];
+    const MALE_NAMES = [
+      "david",
+      "mark",
+      "george",
+      "james",
+      "daniel",
+      "alex",
+      "fred",
+      "tom",
+      "rishi",
+      "ramil",
+      "male",
+      "man",
+      "guy",
+      "paul",
+      "ryan",
+      "christopher",
+      "eric",
+      "matthew",
+      "brian",
+      "aaron",
+      "joseph",
+      "william",
+      "justin",
+      "kevin",
+      "richard",
+    ];
 
     function guessGender(voice) {
       const n = (voice.name || "").toLowerCase();
-      if (FEMALE_NAMES.some(k => n.includes(k))) return "female";
-      if (MALE_NAMES.some(k => n.includes(k))) return "male";
+      if (FEMALE_NAMES.some((k) => n.includes(k))) return "female";
+      if (MALE_NAMES.some((k) => n.includes(k))) return "male";
       return "unknown";
     }
 
@@ -654,23 +819,30 @@ function initChatPage() {
       if (!voices.length) voices = cachedVoices;
       if (!voices.length) return null;
 
-      const langMatches = voices.filter(v => {
+      const langMatches = voices.filter((v) => {
         if (lang === "fil") {
-          return v.lang === "fil-PH" || v.lang === "tl-PH"
-              || v.lang === "en-PH" || v.lang.startsWith("en");
+          return (
+            v.lang === "fil-PH" ||
+            v.lang === "tl-PH" ||
+            v.lang === "en-PH" ||
+            v.lang.startsWith("en")
+          );
         }
-        return v.lang === "en-PH" || v.lang === "en-US" || v.lang.startsWith("en");
+        return (
+          v.lang === "en-PH" || v.lang === "en-US" || v.lang.startsWith("en")
+        );
       });
 
       const pool = langMatches.length ? langMatches : voices;
 
       if (genderPref === "female" || genderPref === "male") {
-        const matched = pool.find(v => guessGender(v) === genderPref);
+        const matched = pool.find((v) => guessGender(v) === genderPref);
         if (matched) return matched;
       }
 
-      if (lang === "fil") return pool.find(v => v.lang === "en-PH") || pool[0];
-      return pool.find(v => v.lang === "en-US") || pool[0];
+      if (lang === "fil")
+        return pool.find((v) => v.lang === "en-PH") || pool[0];
+      return pool.find((v) => v.lang === "en-US") || pool[0];
     }
 
     function stopAll() {
@@ -687,7 +859,12 @@ function initChatPage() {
     function speakWithWebSpeech(text, lang, genderPref) {
       const utter = new SpeechSynthesisUtterance(text);
       const voice = findVoice(lang, genderPref);
-      console.log("[TTS] speakWithWebSpeech → genderPref:", genderPref, "| voice:", voice ? voice.name : "NONE");
+      console.log(
+        "[TTS] speakWithWebSpeech → genderPref:",
+        genderPref,
+        "| voice:",
+        voice ? voice.name : "NONE",
+      );
       if (voice) utter.voice = voice;
 
       utter.lang = lang === "fil" ? "fil-PH" : "en-US";
@@ -718,7 +895,14 @@ function initChatPage() {
       const intent = lastBubble.dataset.intent;
       const lang = lastBubble.dataset.lang || "en";
 
-      console.log("[TTS] Clicked. voicePreference =", voicePreference, "| lang =", lang, "| intent =", intent);
+      console.log(
+        "[TTS] Clicked. voicePreference =",
+        voicePreference,
+        "| lang =",
+        lang,
+        "| intent =",
+        intent,
+      );
 
       if (voicePreference !== "default") {
         console.log("[TTS] Using gender:", voicePreference);
@@ -754,7 +938,6 @@ function initChatPage() {
       speakWithWebSpeech(text, lang, "default");
     });
   }
-
 
   loadSuggestions();
   loadRecent();

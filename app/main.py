@@ -577,6 +577,28 @@ def analytics(
         for row in top_intents_rows
     ]
 
+    # --- Potential service bottlenecks ---
+    # These are high-demand concerns based on chatbot inquiry frequency.
+    matched_intent_total = sum(item["count"] for item in top_intents)
+    active_intent_count = len(top_intents)
+    average_intent_count = (
+        matched_intent_total / active_intent_count
+        if active_intent_count
+        else 0
+    )
+    service_bottlenecks = [
+        {
+            "intent": item["intent"],
+            "count": item["count"],
+            "share": round(
+                item["count"] / matched_intent_total, 4
+            ) if matched_intent_total else 0,
+            "status": "High Demand",
+        }
+        for item in top_intents
+        if item["count"] > average_intent_count
+    ][:5]
+
     # --- Out-of-scope rate ---
     total_student_msgs = (
         db.query(func.count(Message.id))
@@ -633,6 +655,8 @@ def analytics(
         },
         "top_intents": top_intents,
         "daily_volume": daily_volume,
+        "service_bottlenecks": service_bottlenecks,
+        "average_intent_count": round(average_intent_count, 2),
     }
 
 

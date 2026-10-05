@@ -45,7 +45,7 @@ def main():
             kb.question = question
             kb.answer_en = answer_en
             kb.answer_fil = answer_fil
-            kb.last_updated_at = datetime.utcnow()
+            kb.last_updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
 
             updated += 1
 

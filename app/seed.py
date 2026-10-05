@@ -279,9 +279,23 @@ SEED = [
     ),
     (
         "registrar_info", "general",
-        "Where is the Registrar's Office and what are its office hours?",
-        "For the Registrar's Office location, current office hours, and official contact details, please check the latest PLMun announcement or contact the university directly. Office schedules and contact information may change, so the chatbot will not provide unverified details.",
-        "Para sa lokasyon, kasalukuyang office hours, at opisyal na contact details ng Registrar's Office, tingnan ang pinakabagong PLMun announcement o direktang makipag-ugnayan sa unibersidad. Maaaring magbago ang schedule at contact information kaya hindi nagbibigay ang chatbot ng hindi pa beripikadong detalye.",
+         "Where is the Registrar's Office and what are its office hours?",
+
+        "The Office of the University Registrar maintains student records and handles "
+        "enrollment-related procedures. According to the PLMun Citizen's Charter, the "
+        "Office of the University Registrar is located at the 1st Floor, Student Center "
+        "Building, PLMun, University Road, Poblacion, Muntinlupa City. "
+        "You may contact the office at 8659-2075 local 205. "
+        "For service-specific requirements or updated schedules, please check the latest "
+        "PLMun Citizen's Charter or official university announcements.",
+
+        "Ang Office of the University Registrar ang nangangasiwa sa student records at "
+        "mga enrollment-related procedures. Ayon sa PLMun Citizen's Charter, matatagpuan "
+        "ang Office of the University Registrar sa 1st Floor, Student Center Building, "
+        "PLMun, University Road, Poblacion, Muntinlupa City. "
+        "Maaaring makipag-ugnayan sa opisina sa 8659-2075 local 205. "
+        "Para sa partikular na requirements o updated na schedule, tingnan ang pinakabagong "
+        "PLMun Citizen's Charter o opisyal na university announcements.",
         [
             "what are the registrar's office hours",
             "saan ang registrar's office",
@@ -289,12 +303,12 @@ SEED = [
             "paano makontak ang registrar",
             "anong oras bukas ang registrar",
             "how can i contact the registrar",
-"what is the registrar contact information",
-"what time does the registrar close",
-"where can i find the registrar office",
-"ano ang contact number ng registrar",
-"anong oras nagsasara ang registrar",
-"saan makikita ang registrar office",
+            "what is the registrar contact information",
+            "what time does the registrar close",
+            "where can i find the registrar office",
+            "ano ang contact number ng registrar",
+            "anong oras nagsasara ang registrar",
+            "saan makikita ang registrar office",
         ],
     ),
     (
