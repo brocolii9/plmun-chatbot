@@ -17,8 +17,34 @@ SEED = [
     (
         "enrollment_procedure", "enrollment",
         "What are the steps for enrollment?",
-        "For enrollment procedures, please follow the latest official enrollment instructions issued by PLMun. The exact sequence of steps may vary depending on the enrollment period and the student's status. Please check the current PLMun enrollment announcement or confirm the procedure with the Registrar's Office or your College/Department.",
-        "Para sa enrollment procedure, sundin ang pinakabagong opisyal na enrollment instructions ng PLMun. Maaaring mag-iba ang eksaktong pagkakasunod-sunod ng mga hakbang depende sa enrollment period at status ng estudyante. Tingnan ang kasalukuyang PLMun enrollment announcement o kumpirmahin ang proseso sa Registrar's Office o sa inyong College/Department.",
+        "For enrollment, the process depends on your student status.\n\n"
+        "For new undergraduate applicants:\n"
+        "• Use the official PLMun Undergraduate Admission Portal.\n"
+        "• Create or log in to your admission account.\n"
+        "• Complete the required information in the online admission form.\n"
+        "• Submit the required scanned admission documents.\n"
+        "• Take the admission test according to the schedule provided by PLMun.\n"
+        "• Check the official admission result and follow the enrollment instructions given to successful applicants.\n\n"
+        "For continuing students, the PLMun Student Handbook describes the enrollment process as:\n"
+        "• Proceed to your respective College for advising or pre-enrollment.\n"
+        "• Have your subjects encoded through the College or Dean's Office.\n"
+        "• Complete the applicable enrollment requirements for the semester.\n"
+        "• Obtain your Certificate of Matriculation (COM) through the Office of the University Registrar.\n\n"
+        "Enrollment schedules and procedures may be updated each semester, so always follow the latest official PLMun announcement and the instructions of your College and the Office of the University Registrar.",
+        "Ang enrollment process ay depende sa student status.\n\n"
+        "Para sa mga bagong undergraduate applicant:\n"
+        "• Gamitin ang official PLMun Undergraduate Admission Portal.\n"
+        "• Gumawa o mag-login sa inyong admission account.\n"
+        "• Kumpletuhin ang kinakailangang impormasyon sa online admission form.\n"
+        "• Isumite ang kinakailangang scanned admission documents.\n"
+        "• Kumuha ng admission test ayon sa schedule na ibibigay ng PLMun.\n"
+        "• Tingnan ang official admission result at sundin ang enrollment instructions para sa successful applicants.\n\n"
+        "Para sa continuing students, inilalarawan sa PLMun Student Handbook ang enrollment process bilang:\n"
+        "• Pumunta sa inyong College para sa advising o pre-enrollment.\n"
+        "• Ipa-encode ang inyong subjects sa pamamagitan ng College o Dean's Office.\n"
+        "• Kumpletuhin ang applicable enrollment requirements para sa semester.\n"
+        "• Kunin ang Certificate of Matriculation (COM) sa pamamagitan ng Office of the University Registrar.\n\n"
+        "Maaaring ma-update bawat semester ang enrollment schedule at procedure, kaya sundin palagi ang pinakabagong official PLMun announcement at instructions ng inyong College at Office of the University Registrar.",
         [
             "how do i enroll this semester",
             "paano mag-enroll ngayong semester",
@@ -87,8 +113,22 @@ SEED = [
     (
         "add_drop_change_subjects", "enrollment",
         "How do I add, drop, or change a subject?",
-        "To add, drop, or change a subject, follow the current procedure provided by your College/Department and the Registrar's Office. You may be required to submit the appropriate request form and obtain the necessary approval before the request can be processed. Requests must be completed within the official period announced by PLMun. For the exact form, approvals, and deadline, please check the latest university guidelines.",
-        "Para mag-add, mag-drop, o magpalit ng subject, sundin ang kasalukuyang proseso ng inyong College/Department at ng Registrar's Office. Maaaring kailanganing magsumite ng tamang request form at kumuha ng kinakailangang approval bago ma-process ang request. Dapat maisagawa ito sa loob ng opisyal na panahon na itinakda ng PLMun. Para sa eksaktong form, approvals, at deadline, tingnan ang pinakabagong university guidelines.",
+        "According to the PLMun Student Handbook, students who need to add, drop, or change a subject should follow the official subject-adjustment process.\n\n"
+        "Important guidelines include:\n"
+        "• Adding or dropping a subject is allowed not later than two weeks after the start of classes.\n"
+        "• A student may add or drop a maximum of two subjects for the current semester.\n"
+        "• The request must receive the required approval from the instructor or College Dean and be submitted to the Registrar for official recording.\n"
+        "• Dropping a subject without official approval may result in a failing grade.\n"
+        "• Transfer to another class requires approval from the College Dean and must be recorded by the University Registrar.\n\n"
+        "These rules are stated in the PLMun Student Handbook. Students should still check the current semester announcement or confirm with their College and the Registrar's Office in case the schedule or procedure has been updated.",
+        "Ayon sa PLMun Student Handbook, ang mga estudyanteng kailangang mag-add, mag-drop, o magpalit ng subject ay dapat sumunod sa opisyal na subject-adjustment process.\n\n"
+        "Mahahalagang guidelines:\n"
+        "• Ang pag-add o pag-drop ng subject ay pinapayagan hanggang dalawang linggo pagkatapos magsimula ang klase.\n"
+        "• Maaaring mag-add o mag-drop ng maximum na dalawang subjects sa kasalukuyang semester.\n"
+        "• Kailangang makuha ang kinakailangang approval ng instructor o College Dean at maisumite sa Registrar para sa official recording.\n"
+        "• Ang pag-drop ng subject nang walang official approval ay maaaring magresulta sa failing grade.\n"
+        "• Ang paglipat sa ibang class section ay nangangailangan ng approval ng College Dean at dapat ma-record ng University Registrar.\n\n"
+        "Ang mga patakarang ito ay nakasaad sa PLMun Student Handbook. Tingnan pa rin ang current semester announcement o kumpirmahin sa inyong College at Registrar's Office kung may bagong schedule o procedure.",
         [
             "how do i add a subject",
             "paano mag-drop ng subject",
@@ -109,8 +149,22 @@ SEED = [
     (
         "leave_of_absence_shifting", "policy",
         "How do I apply for a leave of absence, shift programs, or withdraw?",
-        "For leave of absence, shifting, or withdrawal concerns, please follow the latest official PLMun procedure for your specific request. Requirements, approvals, and deadlines may differ depending on the type of request and the student's situation. Please confirm the current requirements and procedure with the Registrar's Office or the appropriate College/Department before submitting a request.",
-        "Para sa leave of absence, shifting, o withdrawal, sundin ang pinakabagong opisyal na proseso ng PLMun para sa inyong request. Maaaring magkaiba ang requirements, approvals, at deadlines depende sa uri ng request at sitwasyon ng estudyante. Kumpirmahin muna ang kasalukuyang requirements at proseso sa Registrar's Office o sa inyong College/Department bago magsumite ng request.",
+        "For Leave of Absence (LOA), the PLMun Student Handbook states:\n\n"
+        "• The request must be made in writing.\n"
+        "• The LOA must be approved by the College Dean.\n"
+        "• An LOA may be granted for one academic year.\n"
+        "• It may be extended for another year upon the student's request.\n"
+        "• If the LOA exceeds two academic years, the student loses residency status.\n"
+        "• A student who withdraws without a formal LOA must apply for readmission.\n\n"
+        "For shifting to another program, the current step-by-step procedure is not stated in the verified source used by this chatbot. Please confirm the latest shifting requirements and procedure with your College or the Registrar's Office.",
+        "Para sa Leave of Absence (LOA), nakasaad sa PLMun Student Handbook ang mga sumusunod:\n\n"
+        "• Kailangang gawin ang request in writing.\n"
+        "• Kailangang aprubahan ang LOA ng College Dean.\n"
+        "• Maaaring payagan ang LOA nang isang academic year.\n"
+        "• Maaari itong ma-extend ng isa pang taon kapag hiniling ng estudyante.\n"
+        "• Kapag lumampas sa dalawang academic years ang LOA, mawawala ang residency status ng estudyante.\n"
+        "• Ang estudyanteng mag-withdraw nang walang formal LOA ay kailangang mag-apply for readmission.\n\n"
+        "Para naman sa shifting sa ibang program, walang verified step-by-step shifting procedure sa source na ginagamit ng chatbot. Kumpirmahin ang pinakabagong requirements at proseso sa inyong College o sa Registrar's Office.",
         [
             "how do i apply for a leave of absence",
             "paano mag-shift ng program",
@@ -138,8 +192,18 @@ SEED = [
     (
         "tor_request", "documents",
         "How do I request a Transcript of Records (TOR)?",
-        "To request a Transcript of Records (TOR), please follow the current document-request procedure provided by the PLMun Registrar's Office. The required documents, fees, and processing time should be confirmed through the latest official PLMun information because these details may change. Contact or visit the Registrar's Office for the current TOR request instructions.",
-        "Para humiling ng Transcript of Records (TOR), sundin ang kasalukuyang document-request procedure ng PLMun Registrar's Office. Ang kinakailangang dokumento, bayad, at processing time ay dapat kumpirmahin sa pinakabagong opisyal na impormasyon ng PLMun dahil maaaring magbago ang mga ito. Makipag-ugnayan o pumunta sa Registrar's Office para sa kasalukuyang TOR request instructions.",
+        "To request a Transcript of Records (TOR):\n\n"
+        "• Coordinate with the PLMun Office of the University Registrar.\n"
+        "• The Registrar is located at the 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n"
+        "• The PLMun Student Handbook states that official documents, including the Transcript of Records, should be issued within thirty days from request.\n\n"
+        "The current TOR request form, documentary requirements, fees, and exact release schedule are not specified in the verified sources used by this chatbot. Please confirm these details with the Registrar before submitting or paying for a request.",
+        "Para humiling ng Transcript of Records (TOR):\n\n"
+        "• Makipag-ugnayan sa PLMun Office of the University Registrar.\n"
+        "• Ang Registrar ay matatagpuan sa 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n"
+        "• Nakasaad sa PLMun Student Handbook na ang mga official documents, kabilang ang Transcript of Records, ay dapat ma-issue within thirty days mula sa request.\n\n"
+        "Ang kasalukuyang TOR request form, documentary requirements, fees, at eksaktong release schedule ay hindi nakasaad sa verified sources na ginagamit ng chatbot. Kumpirmahin muna ang mga ito sa Registrar bago magsumite o magbayad para sa request.",
         [
             "how do i request my transcript of records",
             "paano kumuha ng tor",
@@ -162,8 +226,18 @@ SEED = [
     (
         "certification_request", "documents",
         "How do I request a certification (Certificate of Enrollment, Grades, etc.)?",
-        "For certification requests, please follow the current procedure of the PLMun Registrar's Office. The available types of certification, requirements, fees, and processing times are not yet verified in this knowledge base and may change. Please confirm the specific certification you need and the latest requirements with the Registrar's Office.",
-        "Para sa certification requests, sundin ang kasalukuyang proseso ng PLMun Registrar's Office. Ang mga available na uri ng certification, requirements, bayad, at processing time ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Kumpirmahin sa Registrar's Office ang partikular na certification na kailangan ninyo at ang pinakabagong requirements.",
+        "For certification requests:\n\n"
+        "• Coordinate with the PLMun Office of the University Registrar.\n"
+        "• The Registrar is located at the 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n"
+        "• The PLMun Student Handbook states that official certificates and similar school documents should be issued within thirty days from request.\n\n"
+        "The exact certification types currently available, request form, documentary requirements, fees, and release schedule are not specified in the verified sources used by this chatbot. Please confirm the specific certification you need with the Registrar before submitting a request.",
+        "Para sa certification request:\n\n"
+        "• Makipag-ugnayan sa PLMun Office of the University Registrar.\n"
+        "• Ang Registrar ay matatagpuan sa 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n"
+        "• Nakasaad sa PLMun Student Handbook na ang official certificates at iba pang similar school documents ay dapat ma-issue within thirty days mula sa request.\n\n"
+        "Ang eksaktong certification types na kasalukuyang available, request form, documentary requirements, fees, at release schedule ay hindi nakasaad sa verified sources na ginagamit ng chatbot. Kumpirmahin muna sa Registrar kung anong certification ang kailangan bago magsumite ng request.",
         [
             "how do i get a certificate of enrollment",
             "paano kumuha ng certificate of enrollment",
@@ -185,8 +259,16 @@ SEED = [
     (
         "transfer_credentials", "documents",
         "How do I get Honorable Dismissal / Transfer Credentials?",
-        "For transfer credential requests, including documents needed when transferring to another school, please follow the current procedure of the PLMun Registrar's Office. The exact requirements, forms, fees, and processing time are not verified in this knowledge base and may change. Please confirm the latest instructions directly with the Registrar's Office before submitting your request.",
-        "Para sa transfer credential requests, kabilang ang mga dokumentong kailangan kapag lilipat sa ibang paaralan, sundin ang kasalukuyang proseso ng PLMun Registrar's Office. Ang eksaktong requirements, forms, bayad, at processing time ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Kumpirmahin muna ang pinakabagong instructions sa Registrar's Office bago magsumite ng request.",
+        "For Honorable Dismissal or transfer credentials, the PLMun Student Handbook states:\n\n"
+        "• A Certificate of Honorable Dismissal is issued by the University Registrar when a student voluntarily withdraws from PLMun to transfer to another school.\n"
+        "• The student must be cleared of all accountabilities before the certificate can be issued.\n"
+        "• A student who has already been issued a Certificate of Honorable Dismissal cannot be re-admitted to PLMun.\n\n"
+        "The current request form, documentary requirements, fees, and exact processing procedure are not specified in the verified source used by this chatbot. Please confirm the latest requirements with the Office of the University Registrar before submitting your request.",
+        "Para sa Honorable Dismissal o transfer credentials, nakasaad sa PLMun Student Handbook ang mga sumusunod:\n\n"
+        "• Ang Certificate of Honorable Dismissal ay ini-issue ng University Registrar kapag boluntaryong nag-withdraw ang estudyante sa PLMun upang lumipat sa ibang paaralan.\n"
+        "• Kailangang cleared ang estudyante sa lahat ng accountabilities bago ma-issue ang certificate.\n"
+        "• Ang estudyanteng na-issue-han na ng Certificate of Honorable Dismissal ay hindi na maaaring ma-readmit sa PLMun.\n\n"
+        "Ang kasalukuyang request form, documentary requirements, fees, at eksaktong processing procedure ay hindi nakasaad sa verified source na ginagamit ng chatbot. Kumpirmahin muna ang pinakabagong requirements sa Office of the University Registrar bago magsumite ng request.",
         [
             "how do i get honorable dismissal",
             "paano kumuha ng transfer credentials",
@@ -212,8 +294,18 @@ SEED = [
     (
         "document_fees_processing_time", "documents",
         "How much are document fees and how long is processing?",
-        "Document fees and processing times may vary depending on the type of document requested and the current Registrar procedures. The exact amounts and processing periods are not verified in this knowledge base. Please check the latest official PLMun information or confirm directly with the Registrar's Office before making a request or payment.",
-        "Maaaring mag-iba ang bayad at processing time depende sa uri ng dokumentong hinihingi at sa kasalukuyang proseso ng Registrar. Ang eksaktong halaga at processing period ay hindi pa beripikado sa knowledge base na ito. Tingnan ang pinakabagong opisyal na impormasyon ng PLMun o direktang kumpirmahin sa Registrar's Office bago mag-request o magbayad.",
+        "Document fees and processing times depend on the specific document requested.\n\n"
+        "Verified information available to this chatbot:\n"
+        "• The 2019 PLMun Student Handbook states that official certificates, diplomas, Transcript of Records (TOR), grades, transfer credentials, and similar documents should be issued within thirty days from request.\n"
+        "• The Office of the University Registrar is located at the 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n\n"
+        "Current fees and the exact processing time for each type of document are not specified in the verified current sources used by this chatbot. Please confirm the amount and release schedule with the Office of the University Registrar before making a payment.",
+        "Ang document fees at processing time ay maaaring magkaiba depende sa uri ng dokumentong hinihingi.\n\n"
+        "Verified information na available sa chatbot:\n"
+        "• Nakasaad sa 2019 PLMun Student Handbook na ang official certificates, diploma, Transcript of Records (TOR), grades, transfer credentials, at iba pang similar documents ay dapat ma-issue within thirty days mula sa request.\n"
+        "• Ang Office of the University Registrar ay matatagpuan sa 1st Floor, Student Center Building.\n"
+        "• Contact number: 8659-2075 local 205.\n\n"
+        "Ang kasalukuyang fee at eksaktong processing time ng bawat uri ng dokumento ay hindi nakasaad sa verified current sources na ginagamit ng chatbot. Kumpirmahin muna ang halaga at release schedule sa Office of the University Registrar bago magbayad.",
         [
             "how much is the fee for documents",
             "magkano ang bayad sa mga dokumento",
@@ -236,8 +328,20 @@ SEED = [
     (
         "correction_of_records", "policy",
         "How do I correct my records or complete an INC grade?",
-        "For corrections to student records, such as an incorrect name, birth date, or other personal information, please contact the PLMun Registrar's Office and follow the current correction procedure. The supporting documents and approval requirements depend on the type of correction and are not verified in this knowledge base. Please confirm the exact requirements with the Registrar's Office.",
-        "Para sa pagwawasto ng student records, gaya ng maling pangalan, birth date, o ibang personal na impormasyon, makipag-ugnayan sa PLMun Registrar's Office at sundin ang kasalukuyang correction procedure. Ang supporting documents at approval requirements ay depende sa uri ng correction at hindi pa beripikado sa knowledge base na ito. Kumpirmahin ang eksaktong requirements sa Registrar's Office.",
+        "For grade corrections and incomplete grades (INC), the PLMun Student Handbook provides the following guidance:\n\n"
+        "• A change of final grade may be allowed only when there is an error in the computation of the grade within the prevailing academic year.\n"
+        "• A grade change must be supported by the necessary academic records and requires final approval of the VPAA.\n"
+        "• An INC must be completed within one academic year; otherwise, it may result in a grade of 5.0.\n"
+        "• For completion of an INC, the student should secure a Completion Form from the Registrar's Office and provide copies to the University Registrar, College Dean, and Instructor.\n"
+        "• The instructor may require completion of missing requirements such as an examination or term paper before submitting the completed grade to the Registrar's Office.\n\n"
+        "For corrections to personal student records such as name, birth date, or other personal information, the current step-by-step procedure and documentary requirements are not specified in the verified source used by this chatbot. Please confirm the latest requirements with the Office of the University Registrar.",
+        "Para sa grade correction at incomplete grade (INC), nakasaad sa PLMun Student Handbook ang mga sumusunod:\n\n"
+        "• Maaaring baguhin ang final grade kung may error sa computation ng grade sa loob ng kasalukuyang academic year.\n"
+        "• Kailangang may supporting academic records ang grade change at nangangailangan ito ng final approval ng VPAA.\n"
+        "• Kailangang makumpleto ang INC sa loob ng isang academic year; kung hindi, maaari itong maging grade na 5.0.\n"
+        "• Para sa completion ng INC, kailangang kumuha ng Completion Form sa Registrar's Office at magbigay ng kopya sa University Registrar, College Dean, at Instructor.\n"
+        "• Maaaring ipagawa ng instructor ang kulang na requirements tulad ng examination o term paper bago isumite ang completed grade sa Registrar's Office.\n\n"
+        "Para sa correction ng personal student records gaya ng pangalan, birth date, o ibang personal information, walang verified step-by-step procedure at documentary requirements sa source na ginagamit ng chatbot. Kumpirmahin ang pinakabagong requirements sa Office of the University Registrar.",
         [
             "how do i correct my name in my records",
             "paano ipa-correct ang birthdate sa records ko",
@@ -256,8 +360,16 @@ SEED = [
     (
         "graduation_requirements", "graduation",
         "What are the graduation requirements?",
-        "For graduation requirements, students should follow the latest official PLMun guidelines for graduating students. The specific academic, documentary, and clearance requirements are not verified in this knowledge base and may vary depending on the student's program and status. Please confirm the current graduation requirements with the Registrar's Office or the appropriate College/Department.",
-        "Para sa graduation requirements, sundin ang pinakabagong opisyal na guidelines ng PLMun para sa graduating students. Ang partikular na academic, documentary, at clearance requirements ay hindi pa beripikado sa knowledge base na ito at maaaring mag-iba depende sa program at status ng estudyante. Kumpirmahin ang kasalukuyang graduation requirements sa Registrar's Office o sa inyong College/Department.",
+        "For graduation preparation, the PLMun Student Handbook states:\n\n"
+        "• During the First Semester of the School Year, senior students should fill out a form requesting evaluation of their subjects and grades from the Office of the Registrar.\n"
+        "• Graduating students are also required to undergo an Exit Interview.\n"
+        "• Students who may qualify for Latin honors undergo a separate evaluation and deliberation process involving the Office of the University Registrar, College Dean, and University Council.\n\n"
+        "The complete current documentary requirements, clearance requirements, application deadlines, and graduation schedule are not fully specified in the verified source used by this chatbot. Please confirm the latest graduation instructions with the Office of the University Registrar and your College.",
+        "Para sa paghahanda sa graduation, nakasaad sa PLMun Student Handbook ang mga sumusunod:\n\n"
+        "• Sa First Semester ng School Year, ang senior students ay kailangang mag-fill out ng form para mag-request ng evaluation ng kanilang subjects at grades sa Office of the Registrar.\n"
+        "• Kailangan ding sumailalim sa Exit Interview ang graduating students.\n"
+        "• Ang mga estudyanteng maaaring maging qualified for Latin honors ay dumadaan sa hiwalay na evaluation at deliberation process na kinabibilangan ng Office of the University Registrar, College Dean, at University Council.\n\n"
+        "Ang kumpletong kasalukuyang documentary requirements, clearance requirements, application deadlines, at graduation schedule ay hindi ganap na nakasaad sa verified source na ginagamit ng chatbot. Kumpirmahin ang pinakabagong graduation instructions sa Office of the University Registrar at sa inyong College.",
         [
             "what are the requirements for graduation",
             "paano mag-apply para sa graduation",
@@ -276,8 +388,14 @@ SEED = [
     (
         "diploma_and_clearance", "graduation",
         "How do I claim my diploma and get my clearance?",
-        "For diploma and clearance concerns, please follow the current PLMun procedure for completing clearance and claiming a diploma. The required clearances, release schedule, documents, and other conditions are not verified in this knowledge base and may change. Please confirm the latest procedure with the Registrar's Office and the appropriate university offices.",
-        "Para sa diploma at clearance concerns, sundin ang kasalukuyang proseso ng PLMun para sa pag-complete ng clearance at pag-claim ng diploma. Ang kinakailangang clearances, release schedule, documents, at iba pang kondisyon ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Kumpirmahin ang pinakabagong proseso sa Registrar's Office at sa mga kaukulang university offices.",
+        "For diploma and clearance concerns:\n\n"
+        "• The PLMun Student Handbook states that diplomas and other official school documents should be issued within thirty days from request.\n"
+        "• Diploma-related requests should be coordinated with the Office of the University Registrar.\n\n"
+        "The verified source used by this chatbot does not provide the current step-by-step graduation clearance procedure, required offices for clearance, clearance form requirements, diploma release schedule, or current fees. Please confirm these details with the Office of the University Registrar before processing your clearance or claiming your diploma.",
+        "Para sa diploma at clearance concerns:\n\n"
+        "• Nakasaad sa PLMun Student Handbook na ang diploma at iba pang official school documents ay dapat ma-issue within thirty days mula sa request.\n"
+        "• Ang diploma-related requests ay dapat i-coordinate sa Office of the University Registrar.\n\n"
+        "Ang verified source na ginagamit ng chatbot ay walang kasalukuyang step-by-step graduation clearance procedure, listahan ng offices na kailangang i-clear, clearance form requirements, diploma release schedule, o current fees. Kumpirmahin ang mga detalyeng ito sa Office of the University Registrar bago mag-process ng clearance o mag-claim ng diploma.",
         [
             "how do i claim my diploma",
             "paano kumuha ng clearance",
@@ -392,8 +510,20 @@ SEED = [
     (
         "grade_concern", "policy",
         "Where can I check my grades and what if there is a problem?",
-        "For concerns about a missing, incorrect, or disputed grade, please follow the current PLMun procedure for grade concerns. The appropriate office or personnel and the documents required may depend on the specific case and are not verified in this knowledge base. Please confirm the proper procedure with your College/Department or the Registrar's Office.",
-        "Para sa concern tungkol sa nawawala, mali, o disputed na grade, sundin ang kasalukuyang proseso ng PLMun para sa grade concerns. Maaaring magdepende sa partikular na kaso ang tamang office o personnel na lalapitan at ang mga dokumentong kailangan, at hindi pa beripikado ang mga ito sa knowledge base na ito. Kumpirmahin ang tamang proseso sa inyong College/Department o sa Registrar's Office.",
+        "For grade concerns, the PLMun Student Handbook provides the following guidance:\n\n"
+        "• Grades are distributed every semester according to the schedule determined by the College Dean.\n"
+        "• If there is a discrepancy between the grade given to the student and the grade recorded on the official grading sheet, the grade on the grading sheet is considered official and final.\n"
+        "• A final grade may be changed only if there is an error in the computation of the grade within the prevailing academic year.\n"
+        "• A grade change must be supported by necessary academic records, such as the class record, final examination paper, and other related documents.\n"
+        "• Final approval of the VPAA is required for a grade change.\n\n"
+        "The current online grade-viewing procedure or portal instructions are not specified in the verified source used by this chatbot. For a missing or incorrect grade, please coordinate with your College or the Office of the University Registrar.",
+        "Para sa grade concerns, nakasaad sa PLMun Student Handbook ang mga sumusunod:\n\n"
+        "• Ang grades ay ibinibigay bawat semester ayon sa schedule na itinakda ng College Dean.\n"
+        "• Kapag may pagkakaiba sa grade na ibinigay sa estudyante at sa grade na nakalagay sa official grading sheet, ang grade sa grading sheet ang itinuturing na official at final.\n"
+        "• Maaaring baguhin ang final grade kung may error sa computation ng grade sa loob ng kasalukuyang academic year.\n"
+        "• Kailangang suportado ang grade change ng academic records tulad ng class record, final examination paper, at iba pang related documents.\n"
+        "• Kailangan ang final approval ng VPAA para sa grade change.\n\n"
+        "Ang kasalukuyang online grade-viewing procedure o portal instructions ay hindi nakasaad sa verified source na ginagamit ng chatbot. Para sa missing o incorrect na grade, makipag-ugnayan sa inyong College o sa Office of the University Registrar.",
         [
             "where can i check my grades",
             "paano makita ang grades ko",
@@ -412,8 +542,16 @@ SEED = [
     (
         "cog_request", "documents",
         "How do I get a Certificate of Grades (COG)?",
-        "For a Certificate of Grades (COG) request, please follow the current document-request procedure of the PLMun Registrar's Office. The exact requirements, fees, and processing time are not verified in this knowledge base and may change. Please confirm the latest COG request instructions with the Registrar's Office.",
-        "Para sa Certificate of Grades (COG) request, sundin ang kasalukuyang document-request procedure ng PLMun Registrar's Office. Ang eksaktong requirements, bayad, at processing time ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Kumpirmahin ang pinakabagong COG request instructions sa Registrar's Office.",
+        "For a Certificate of Grades (COG) request:\n\n"
+        "• Coordinate with the PLMun Office of the University Registrar.\n"
+        "• The Certificate of Grades is an official academic document used to show a student's grades.\n"
+        "• The PLMun Student Handbook states that official certificates, grades, and similar school documents should be issued within thirty days from request.\n\n"
+        "The current COG request form, documentary requirements, fees, and exact release schedule are not specified in the verified sources used by this chatbot. Please confirm the latest COG request procedure with the Office of the University Registrar.",
+        "Para sa Certificate of Grades (COG) request:\n\n"
+        "• Makipag-ugnayan sa PLMun Office of the University Registrar.\n"
+        "• Ang Certificate of Grades ay isang official academic document na nagpapakita ng grades ng estudyante.\n"
+        "• Nakasaad sa PLMun Student Handbook na ang official certificates, grades, at iba pang similar school documents ay dapat ma-issue within thirty days mula sa request.\n\n"
+        "Ang kasalukuyang COG request form, documentary requirements, fees, at eksaktong release schedule ay hindi nakasaad sa verified sources na ginagamit ng chatbot. Kumpirmahin ang pinakabagong COG request procedure sa Office of the University Registrar.",
         [
             "how do i get my certificate of grades",
             "paano kumuha ng cog",
@@ -432,8 +570,16 @@ SEED = [
     (
         "com_request", "documents",
         "How do I get a Certificate of Matriculation (COM)?",
-        "For a Certificate of Matriculation (COM) request, please follow the current document-request procedure of the PLMun Registrar's Office. The exact requirements, fees, and processing time are not verified in this knowledge base and may change. Please confirm the latest COM request instructions with the Registrar's Office.",
-        "Para sa Certificate of Matriculation (COM) request, sundin ang kasalukuyang document-request procedure ng PLMun Registrar's Office. Ang eksaktong requirements, bayad, at processing time ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Kumpirmahin ang pinakabagong COM request instructions sa Registrar's Office.",
+        "For a Certificate of Matriculation (COM):\n\n"
+        "• The COM is an official enrollment document issued through the Office of the University Registrar.\n"
+        "• The PLMun Student Handbook states that duly registered or officially enrolled students with a COM are included in the official Master List of Students and are allowed to attend classes.\n"
+        "• The COM also reflects the subjects officially enrolled by the student.\n\n"
+        "The current procedure for requesting a replacement or additional copy of the COM, including fees and documentary requirements, is not specified in the verified current sources used by this chatbot. Please confirm the latest procedure with the Office of the University Registrar.",
+        "Para sa Certificate of Matriculation (COM):\n\n"
+        "• Ang COM ay isang official enrollment document na ini-issue sa pamamagitan ng Office of the University Registrar.\n"
+        "• Nakasaad sa PLMun Student Handbook na ang duly registered o officially enrolled students na may COM ay kasama sa official Master List of Students at pinapayagang pumasok sa classes.\n"
+        "• Makikita rin sa COM ang mga subjects na officially enrolled ng estudyante.\n\n"
+        "Ang kasalukuyang procedure para humiling ng replacement o additional copy ng COM, kabilang ang fees at documentary requirements, ay hindi nakasaad sa verified current sources na ginagamit ng chatbot. Kumpirmahin ang pinakabagong procedure sa Office of the University Registrar.",
         [
             "how do i get my certificate of matriculation",
             "paano kumuha ng com",
