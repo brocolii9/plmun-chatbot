@@ -41,8 +41,31 @@ SEED = [
     (
         "enrollment_requirements", "enrollment",
         "What are the requirements for enrollment?",
-        "Enrollment requirements may vary depending on the student's status, such as freshman, continuing student, or transferee. Students should follow the current enrollment checklist and official instructions issued by PLMun. Additional documents may be required depending on the student's classification. For the latest and complete list of requirements, please check the official PLMun enrollment announcement or confirm with the Registrar's Office.",
-        "Maaaring magkaiba ang enrollment requirements depende sa status ng estudyante, gaya ng freshman, continuing student, o transferee. Sundin ang kasalukuyang enrollment checklist at opisyal na instructions ng PLMun. Maaaring may karagdagang dokumentong kailangan depende sa classification ng estudyante. Para sa pinakabago at kumpletong listahan ng requirements, tingnan ang opisyal na PLMun enrollment announcement o kumpirmahin sa Registrar's Office.",
+        "For admission, the requirements may depend on your applicant status.\n\n"
+        "Common documents identified by PLMun include:\n"
+        "• 2x2 picture\n"
+        "• PSA Birth Certificate\n"
+        "• Previous school ID or another valid ID\n"
+        "• Recent school card or copy of grades\n"
+        "• Certificate of Good Moral Character\n"
+        "• Form 138\n\n"
+        "For transferees, the following may also be required:\n"
+        "• Transcript of Records (TOR)\n"
+        "• Honorable Dismissal\n\n"
+        "Please check the current PLMun Admission Portal and official admission announcements because requirements may differ depending on applicant status.",
+
+        "Para sa admission, maaaring magkaiba ang requirements depende sa applicant status.\n\n"
+        "Karaniwang dokumentong tinutukoy ng PLMun ay:\n"
+        "• 2x2 picture\n"
+        "• PSA Birth Certificate\n"
+        "• Previous school ID o ibang valid ID\n"
+        "• Recent school card o copy of grades\n"
+        "• Certificate of Good Moral Character\n"
+        "• Form 138\n\n"
+        "Para sa transferees, maaari ring kailanganin ang:\n"
+        "• Transcript of Records (TOR)\n"
+        "• Honorable Dismissal\n\n"
+        "Tingnan ang kasalukuyang PLMun Admission Portal at opisyal na admission announcements dahil maaaring magkaiba ang requirements depende sa applicant status.",
         [
             "what documents do i need to enroll",
             "ano ang mga requirements sa enrollment",
@@ -263,39 +286,35 @@ SEED = [
             "how can i get my clearance form",
             "what are the steps for completing clearance",
             "when will diplomas be released",
-"where do graduating students claim their diploma",
-"paano mag process ng clearance",
-"saan kukunin ang clearance form",
-"kailan makukuha ang diploma",
-"saan ko kukunin ang diploma ko",
-"what is the school clearance process",
-"how do students complete clearance",
-"what are the steps for clearance",
-"ano ang proseso ng clearance",
-        "how do graduates claim their diploma",
-        "where should i claim my diploma",
-        "what is the diploma claiming process",
+            "where do graduating students claim their diploma",
+            "paano mag process ng clearance",
+            "saan kukunin ang clearance form",
+            "kailan makukuha ang diploma",
+            "saan ko kukunin ang diploma ko",
+            "what is the school clearance process",
+            "how do students complete clearance",
+            "what are the steps for clearance",
+            "ano ang proseso ng clearance",
+            "how do graduates claim their diploma",
+            "where should i claim my diploma",
+            "what is the diploma claiming process",
         ],
     ),
     (
         "registrar_info", "general",
          "Where is the Registrar's Office and what are its office hours?",
 
-        "The Office of the University Registrar maintains student records and handles "
-        "enrollment-related procedures. According to the PLMun Citizen's Charter, the "
-        "Office of the University Registrar is located at the 1st Floor, Student Center "
-        "Building, PLMun, University Road, Poblacion, Muntinlupa City. "
-        "You may contact the office at 8659-2075 local 205. "
-        "For service-specific requirements or updated schedules, please check the latest "
-        "PLMun Citizen's Charter or official university announcements.",
+        "The Office of the University Registrar:\n\n"
+        "• Location: 1st Floor, Student Center Building\n"
+        "• Address: PLMun, University Road, Poblacion, Muntinlupa City\n"
+        "• Contact: 8659-2075 local 205\n\n"
+        "For current schedules and service-specific requirements, please follow official PLMun announcements.",
 
-        "Ang Office of the University Registrar ang nangangasiwa sa student records at "
-        "mga enrollment-related procedures. Ayon sa PLMun Citizen's Charter, matatagpuan "
-        "ang Office of the University Registrar sa 1st Floor, Student Center Building, "
-        "PLMun, University Road, Poblacion, Muntinlupa City. "
-        "Maaaring makipag-ugnayan sa opisina sa 8659-2075 local 205. "
-        "Para sa partikular na requirements o updated na schedule, tingnan ang pinakabagong "
-        "PLMun Citizen's Charter o opisyal na university announcements.",
+        "Office of the University Registrar:\n\n"
+        "• Lokasyon: 1st Floor, Student Center Building\n"
+        "• Address: PLMun, University Road, Poblacion, Muntinlupa City\n"
+        "• Contact: 8659-2075 local 205\n\n"
+        "Para sa kasalukuyang schedule at requirements ng partikular na serbisyo, sundin ang opisyal na PLMun announcements.",
         [
             "what are the registrar's office hours",
             "saan ang registrar's office",
@@ -314,8 +333,43 @@ SEED = [
     (
         "scholarship_concerns", "scholarship",
         "What scholarships are available and how do I apply?",
-        "For scholarship concerns, please refer to the latest official PLMun scholarship announcements and requirements. Available scholarship programs, qualifications, application periods, and documentary requirements are not verified in this knowledge base and may change. Please contact the appropriate PLMun office for the current scholarship information and application procedure.",
-        "Para sa scholarship concerns, tingnan ang pinakabagong opisyal na scholarship announcements at requirements ng PLMun. Ang available na scholarship programs, qualifications, application periods, at documentary requirements ay hindi pa beripikado sa knowledge base na ito at maaaring magbago. Makipag-ugnayan sa kaukulang PLMun office para sa kasalukuyang scholarship information at application procedure.",
+        "PLMun provides scholarship and financial assistance programs such as:\n"
+        "• ACE\n"
+        "• I-STEP\n"
+        "• BOARD\n"
+        "• CARRI\n"
+        "• CREATE\n"
+        "• SEAL\n"
+        "• Masteral Degree Scholarship\n\n"
+        "For local scholarship applications, the PLMun Citizen's Charter lists the following requirements:\n"
+        "• Filled-out application form with 2x2 photo\n"
+        "• Letter of Intent\n"
+        "• Photocopy of Certificate of Matriculation (COM)\n"
+        "• Original Certificate of Grades (COG) with previous GPA\n"
+        "• Original Voter's Certificate\n"
+        "• Certificate of Good Moral Character\n"
+        "• Photocopy of School ID\n"
+        "• Photocopy of parent's ID\n\n"
+        "Submit the required documents to the Scholarship and Financial Assistance Division of the Office of Student Affairs. Eligibility and available programs may change, so check the latest official PLMun scholarship announcement.",
+
+        "May scholarship at financial assistance programs ang PLMun tulad ng:\n"
+        "• ACE\n"
+        "• I-STEP\n"
+        "• BOARD\n"
+        "• CARRI\n"
+        "• CREATE\n"
+        "• SEAL\n"
+        "• Masteral Degree Scholarship\n\n"
+        "Para sa local scholarship application, nakalista sa PLMun Citizen's Charter ang mga sumusunod na requirements:\n"
+        "• Filled-out application form na may 2x2 photo\n"
+        "• Letter of Intent\n"
+        "• Photocopy ng Certificate of Matriculation (COM)\n"
+        "• Original Certificate of Grades (COG) na may previous GPA\n"
+        "• Original Voter's Certificate\n"
+        "• Certificate of Good Moral Character\n"
+        "• Photocopy ng School ID\n"
+        "• Photocopy ng ID ng magulang\n\n"
+        "Isumite ang requirements sa Scholarship and Financial Assistance Division ng Office of Student Affairs. Maaaring magbago ang eligibility at available programs, kaya tingnan ang pinakabagong opisyal na PLMun scholarship announcement.",
         [
             "what scholarships are available",
             "paano mag-apply ng scholarship",
@@ -323,16 +377,16 @@ SEED = [
             "may scholarship ba ang plmun",
             "ano ang mga kailangan para sa scholarship",
             "how do students apply for scholarships",
-"what is the scholarship application process",
-"what are the scholarship qualifications",
-"are there financial assistance programs for students",
-"paano mag submit ng scholarship application",
-"ano ang qualifications para sa scholarship",
-"may financial assistance ba para sa students",
-"how can i apply for scholarship assistance",
-"i want to apply for a scholarship program",
-"where can students submit a scholarship application",
-"scholarship application requirements",
+            "what is the scholarship application process",
+            "what are the scholarship qualifications",
+            "are there financial assistance programs for students",
+            "paano mag submit ng scholarship application",
+            "ano ang qualifications para sa scholarship",
+            "may financial assistance ba para sa students",
+            "how can i apply for scholarship assistance",
+            "i want to apply for a scholarship program",
+            "where can students submit a scholarship application",
+            "scholarship application requirements",
         ],
     ),
     (
@@ -347,12 +401,12 @@ SEED = [
             "wala pa ang grade ko sa portal",
             "who do i ask about my grade concern",
             "there is a problem with my grade",
-"my grade looks incorrect",
-"why is my grade missing",
-"who should i contact about an incorrect grade",
-"may problema sa grade ko",
-"bakit wala ang grade ko",
-"sino ang kakausapin tungkol sa maling grade",
+            "my grade looks incorrect",
+            "why is my grade missing",
+            "who should i contact about an incorrect grade",
+            "may problema sa grade ko",
+            "bakit wala ang grade ko",
+            "sino ang kakausapin tungkol sa maling grade",
         ],
     ),
     (
