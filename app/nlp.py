@@ -145,6 +145,21 @@ def preprocess(text: str) -> str:
 
     return " ".join(normalized_tokens)
 
+_INC_WORDS = {"inc", "incomplete"}
+_INC_COMPLETION_WORDS = {
+    "complete",
+    "completion",
+    "remove",
+    "removal",
+    "drop",
+    "finish",
+    "resolve",
+}
+
+def _has_inc_completion_signal(text: str) -> bool:
+    tokens = set(preprocess(text).split())
+    return bool(tokens & _INC_WORDS) and bool(tokens & _INC_COMPLETION_WORDS)
+
 def has_intent_signal(intent: str, text: str) -> bool:
     tokens = set(preprocess(text).split())
 
@@ -335,15 +350,19 @@ def has_intent_signal(intent: str, text: str) -> bool:
             "wrong",
             "error",
             "correct",
+            "correction",
             "fix",
             "palitan",
             "ayusin",
+            "mali",
         }
 
-        return (
+        record_correction = (
             bool(tokens & record_words)
             and bool(tokens & error_words)
         )
+
+        return record_correction or _has_inc_completion_signal(text)
 
     # 10. Graduation
     if intent == "graduation_requirements":
@@ -571,7 +590,10 @@ def classify(text: str) -> Tuple[Optional[str], float, bool]:
         intent = signal_matches[0]
         confidence = probabilities[intent]
 
-        if confidence >= 0.08:
+        if confidence >= 0.08 or (
+            intent == "correction_of_records"
+            and _has_inc_completion_signal(text)
+        ):
             return intent, confidence, True
 
         return None, top_confidence, False
