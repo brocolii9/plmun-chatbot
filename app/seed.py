@@ -1,7 +1,7 @@
 """
 Seeds the knowledge base + intents on first boot.
 
-16 registrar intents, 77 sample utterances in total.
+16 registrar intents, 241 sample utterances in total.
 COG = Certificate of Grades, COM = Certificate of Matriculation.
 Answers marked [TODO: ...] are placeholders: confirm them with the
 PLMun Registrar's Office (or the Citizen's Charter) and replace the

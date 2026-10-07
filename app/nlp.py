@@ -17,6 +17,7 @@ _TOKEN_ALIASES = {
     "registering": "enroll",
     "registered": "enroll",
     "enrolled": "enroll",
+    "eenroll": "enroll",
     "enrolling": "enroll",
     # Enrollment wording
     "registration": "enrollment",
@@ -103,6 +104,7 @@ _TOKEN_ALIASES = {
 }
 _PHRASE_ALIASES = {
     "certificate of matriculation": "com",
+    "matriculation certificate": "com",
     "certificate of grades": "cog",
     "transcript of records": "tor",
     "academic transcript": "transcript",
@@ -558,6 +560,39 @@ def retrain_from_db(db) -> int:
     return len(samples)
 
 def classify(text: str) -> Tuple[Optional[str], float, bool]:
+    normalized = preprocess(text)
+    tokens = normalized.split()
+
+    # High-precision COM rule
+    if "com" in tokens:
+        return "com_request", 1.0, True
+
+    # High-precision document fee / processing-time rule
+    document_process_words = {
+        "fee",
+        "cost",
+        "process",
+        "request",
+        "release",
+        "ready",
+        "receive",
+        "collect",
+        "day",
+        "days",
+        "soon",
+        "magkano",
+        "katagal",
+        "bayad",
+        "kuha",
+        "kumuha",
+    }
+
+    if (
+        "document" in tokens
+        and bool(set(tokens) & document_process_words)
+    ):
+        return "document_fees_processing_time", 1.0, True
+
     probabilities = classifier.predict_proba(text)
 
     if not probabilities:
